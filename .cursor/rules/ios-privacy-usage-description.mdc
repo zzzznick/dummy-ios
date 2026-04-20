@@ -1,0 +1,41 @@
+---
+description: iOS 隐私权限 Usage Description 不可缺失（避免 TCC 闪退）
+alwaysApply: true
+---
+
+# iOS 隐私权限描述（Info.plist）开发规范
+
+## 总则
+
+- **凡是访问 iOS 隐私敏感能力（TCC 管控）都必须在 `ios/Runner/Info.plist` 添加对应 Usage Description Key**，否则在真机/模拟器上可能直接崩溃（而不是抛可捕获异常）。
+- **任何新增依赖/功能点**（例如 ATT、相机、相册、定位、麦克风、蓝牙、通讯录等），在合入代码前都必须同步更新 `Info.plist`。
+- 不要依赖“暂时没触发权限弹窗”来侥幸通过；SDK 在启动或后台预检时同样可能触发崩溃。
+
+## 常见 Key 清单（按能力）
+
+### 追踪（ATT）
+- `NSUserTrackingUsageDescription`
+
+### 相机 / 相册
+- `NSCameraUsageDescription`
+- `NSPhotoLibraryUsageDescription`
+- `NSPhotoLibraryAddUsageDescription`
+
+### 定位
+- `NSLocationWhenInUseUsageDescription`
+- `NSLocationAlwaysAndWhenInUseUsageDescription`（需要时）
+
+### 麦克风
+- `NSMicrophoneUsageDescription`
+
+### 通讯录
+- `NSContactsUsageDescription`
+
+### 蓝牙
+- `NSBluetoothAlwaysUsageDescription`
+
+## 开发流程要求
+
+- 在实现阶段：先确定会触发的权限能力，再补齐 `Info.plist`，避免运行期闪退影响调试效率。
+- 在 Code Review 阶段：凡涉及上述能力/依赖，Review 必须包含 “`Info.plist` Key 是否齐全” 的检查项。
+
