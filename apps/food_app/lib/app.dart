@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_app_common/food_app_common.dart';
 
 import 'boot/boot_page.dart';
-import 'services/att_service.dart';
 
 class FoodApp extends StatefulWidget {
   const FoodApp({super.key});

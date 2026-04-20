@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../analytics/analytics_bridge.dart';
-import '../models/remote_config.dart';
+import '../remote_config/remote_config.dart';
 import '../routing/external_navigator.dart';
 import 'js_message.dart';
+import 'web_shell_shared.dart';
 
 class WebShellTwoPage extends StatefulWidget {
   const WebShellTwoPage({
@@ -32,17 +33,13 @@ class _WebShellTwoPageState extends State<WebShellTwoPage> {
   @override
   void initState() {
     super.initState();
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted);
+    _controller = WebViewController()..setJavaScriptMode(JavaScriptMode.unrestricted);
 
     _controller
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (request) async {
-            final host = request.url.isEmpty
-                ? ''
-                : Uri.tryParse(request.url)?.host ?? '';
-            if (host.contains('t.me')) {
+            if (isForcedExternalHost(request.url)) {
               await widget.externalNavigator.openExternal(request.url);
               return NavigationDecision.prevent;
             }
@@ -128,12 +125,12 @@ class _WebShellTwoPageState extends State<WebShellTwoPage> {
   Future<void> _onOpenSafari(String raw) async {
     final url = JsMessageParsers.parseUrlFromJsonOrRaw(raw);
     if (url == null || url.isEmpty) return;
-
-    if (widget.config.inAppJump == 'true') {
-      await _controller.loadRequest(Uri.parse(url));
-    } else {
-      await widget.externalNavigator.openExternal(url);
-    }
+    await openUrlWithInAppJump(
+      controller: _controller,
+      externalNavigator: widget.externalNavigator,
+      config: widget.config,
+      url: url,
+    );
   }
 
   @override
@@ -144,3 +141,4 @@ class _WebShellTwoPageState extends State<WebShellTwoPage> {
     );
   }
 }
+

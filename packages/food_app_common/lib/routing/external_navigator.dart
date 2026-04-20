@@ -9,3 +9,4 @@ class ExternalNavigator {
     return launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 }
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_app_common/food_app_common.dart';
 
-import 'boot_coordinator.dart';
+import '../local_tabs/local_tabs_page.dart';
 
 class BootPage extends StatefulWidget {
   const BootPage({super.key});
@@ -10,7 +11,14 @@ class BootPage extends StatefulWidget {
 }
 
 class _BootPageState extends State<BootPage> {
-  final BootCoordinator _coordinator = BootCoordinator();
+  static const String _remoteConfigEndpoint =
+      'https://69e1e92fb1cb62b9f31779a9.mockapi.io/api1';
+
+  late final BootCoordinator _coordinator = BootCoordinator(
+    remoteConfigClient: RemoteConfigClient(endpoint: _remoteConfigEndpoint),
+    localHomeBuilder: (_) => const LocalTabsPage(),
+    debugLog: (m) => debugPrint(m),
+  );
 
   @override
   void initState() {

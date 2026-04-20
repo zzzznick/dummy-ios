@@ -3,9 +3,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../analytics/analytics_bridge.dart';
-import '../models/remote_config.dart';
+import '../remote_config/remote_config.dart';
 import '../routing/external_navigator.dart';
 import 'js_message.dart';
+import 'web_shell_shared.dart';
 
 class WebShellOnePage extends StatefulWidget {
   const WebShellOnePage({
@@ -39,10 +40,7 @@ class _WebShellOnePageState extends State<WebShellOnePage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (request) async {
-            final host = request.url.isEmpty
-                ? ''
-                : Uri.tryParse(request.url)?.host ?? '';
-            if (host.contains('t.me')) {
+            if (isForcedExternalHost(request.url)) {
               await widget.externalNavigator.openExternal(request.url);
               return NavigationDecision.prevent;
             }
@@ -84,7 +82,7 @@ class _WebShellOnePageState extends State<WebShellOnePage> {
         "window.jsBridge = { postMessage: function(name, data) { window.Post.postMessage(JSON.stringify({name: name, data: data})) } };";
     final wgPackage =
         "window.WgPackage = {name: '${JsMessageParsers.jsStringLiteral(bundleId)}', version: '${JsMessageParsers.jsStringLiteral(version)}'};";
-    final windowOpenOverride = '''
+    const windowOpenOverride = '''
 (function() {
   try {
     var origOpen = window.open;
@@ -120,12 +118,12 @@ class _WebShellOnePageState extends State<WebShellOnePage> {
   Future<void> _handleEvent(String name, Map<String, dynamic> payload) async {
     if (name == 'openWindow') {
       final url = (payload['url'] ?? '').toString();
-      if (url.isEmpty) return;
-      if (widget.config.inAppJump == 'true') {
-        await _controller.loadRequest(Uri.parse(url));
-      } else {
-        await widget.externalNavigator.openExternal(url);
-      }
+      await openUrlWithInAppJump(
+        controller: _controller,
+        externalNavigator: widget.externalNavigator,
+        config: widget.config,
+        url: url,
+      );
       return;
     }
 
@@ -140,3 +138,4 @@ class _WebShellOnePageState extends State<WebShellOnePage> {
     );
   }
 }
+

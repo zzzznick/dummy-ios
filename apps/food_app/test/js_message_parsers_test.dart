@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:food_app/shells/js_message.dart';
+import 'package:food_app_common/food_app_common.dart';
 
 void main() {
   group('JsMessageParsers', () {

@@ -41,8 +41,7 @@ class JsMessageParsers {
 
     final eventValue = decoded['eventValue'];
     final payloadAny = JsPayload.tryDecodeAny(eventValue);
-    final payload =
-        JsPayload.tryDecodeObject(payloadAny) ?? <String, dynamic>{};
+    final payload = JsPayload.tryDecodeObject(payloadAny) ?? <String, dynamic>{};
     return PostMessage(name: name, payload: payload);
   }
 
@@ -59,3 +58,4 @@ class JsMessageParsers {
     return jsonEncode(s).replaceAll('"', '');
   }
 }
+

@@ -4,29 +4,37 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 import '../analytics/analytics_bridge.dart';
-import '../local_tabs/local_tabs_page.dart';
-import '../models/remote_config.dart';
+import '../remote_config/remote_config.dart';
+import '../remote_config/remote_config_client.dart';
 import '../routing/external_navigator.dart';
-import '../services/remote_config_service.dart';
-import '../shells/web_shell_one_page.dart';
-import '../shells/web_shell_two_page.dart';
+import '../web_shells/web_shell_one_page.dart';
+import '../web_shells/web_shell_two_page.dart';
 import 'boot_decision.dart';
 
 class BootCoordinator {
   BootCoordinator({
-    RemoteConfigService? remoteConfigService,
+    required RemoteConfigClient remoteConfigClient,
+    required WidgetBuilder localHomeBuilder,
     Connectivity? connectivity,
     ExternalNavigator? externalNavigator,
     AnalyticsBridge? analyticsBridge,
-  }) : _remoteConfigService = remoteConfigService ?? RemoteConfigService(),
+    BootDecisionStrategy? decisionStrategy,
+    void Function(String message)? debugLog,
+  }) : _remoteConfigClient = remoteConfigClient,
+       _localHomeBuilder = localHomeBuilder,
        _connectivity = connectivity ?? Connectivity(),
        _externalNavigator = externalNavigator ?? const ExternalNavigator(),
-       _analyticsBridge = analyticsBridge ?? AnalyticsBridge();
+       _analyticsBridge = analyticsBridge ?? AnalyticsBridge(),
+       _decisionStrategy = decisionStrategy ?? const DefaultBootDecisionStrategy(),
+       _debugLog = debugLog;
 
-  final RemoteConfigService _remoteConfigService;
+  final RemoteConfigClient _remoteConfigClient;
+  final WidgetBuilder _localHomeBuilder;
   final Connectivity _connectivity;
   final ExternalNavigator _externalNavigator;
   final AnalyticsBridge _analyticsBridge;
+  final BootDecisionStrategy _decisionStrategy;
+  final void Function(String message)? _debugLog;
 
   bool _hasEvaluated = false;
   bool _inFlight = false;
@@ -67,7 +75,7 @@ class BootCoordinator {
     var delayMs = 500;
     while (true) {
       try {
-        return await _remoteConfigService.fetchFirstItem();
+        return await _remoteConfigClient.fetchFirstItem();
       } catch (_) {
         await Future<void>.delayed(Duration(milliseconds: delayMs));
         delayMs = (delayMs * 2).clamp(500, 8000);
@@ -76,9 +84,13 @@ class BootCoordinator {
   }
 
   Future<void> _route(BuildContext context, RemoteConfigItem? item) async {
-    final decision = BootDecision.decide(item);
-    if (decision.type == BootDestinationType.localTabs) {
-      _replace(context, const LocalTabsPage());
+    final decision = _decisionStrategy.decide(item);
+    _debugLog?.call(
+      '[BootCoordinator] item.url=${item?.url} item.platform=${item?.platform} '
+      'item.hasUrl=${item?.hasUrl} decision.type=${decision.type} decision.url=${decision.url}',
+    );
+    if (decision.type == BootDestinationType.local) {
+      _replace(context, _localHomeBuilder(context));
       return;
     }
 
@@ -116,8 +128,8 @@ class BootCoordinator {
           const Scaffold(body: Center(child: Text('Opened externally'))),
         );
         return;
-      case BootDestinationType.localTabs:
-        _replace(context, const LocalTabsPage());
+      case BootDestinationType.local:
+        _replace(context, _localHomeBuilder(context));
         return;
     }
   }
@@ -128,3 +140,4 @@ class BootCoordinator {
     ).pushReplacement(MaterialPageRoute<void>(builder: (_) => page));
   }
 }
+

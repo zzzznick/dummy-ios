@@ -1,16 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:food_app/boot/boot_decision.dart';
-import 'package:food_app/models/remote_config.dart';
+import 'package:food_app_common/food_app_common.dart';
 
 void main() {
-  group('BootDecision.decide', () {
-    test('null item -> localTabs', () {
-      final d = BootDecision.decide(null);
-      expect(d.type, BootDestinationType.localTabs);
+  group('DefaultBootDecisionStrategy.decide', () {
+    const strategy = DefaultBootDecisionStrategy();
+
+    test('null item -> local', () {
+      final d = strategy.decide(null);
+      expect(d.type, BootDestinationType.local);
     });
 
-    test('empty url -> localTabs', () {
+    test('empty url -> local', () {
       final item = RemoteConfigItem(
         url: '',
         platform: '1',
@@ -21,8 +22,8 @@ void main() {
         adEventListRaw: '',
         inAppJump: 'false',
       );
-      final d = BootDecision.decide(item);
-      expect(d.type, BootDestinationType.localTabs);
+      final d = strategy.decide(item);
+      expect(d.type, BootDestinationType.local);
     });
 
     test('platform 1 -> webShellOne', () {
@@ -36,7 +37,7 @@ void main() {
         adEventListRaw: '',
         inAppJump: 'true',
       );
-      final d = BootDecision.decide(item);
+      final d = strategy.decide(item);
       expect(d.type, BootDestinationType.webShellOne);
       expect(d.url, 'https://example.com');
     });
@@ -52,7 +53,7 @@ void main() {
         adEventListRaw: '',
         inAppJump: 'true',
       );
-      final d = BootDecision.decide(item);
+      final d = strategy.decide(item);
       expect(d.type, BootDestinationType.webShellTwo);
     });
 
@@ -67,7 +68,7 @@ void main() {
         adEventListRaw: '',
         inAppJump: 'false',
       );
-      final d = BootDecision.decide(item);
+      final d = strategy.decide(item);
       expect(d.type, BootDestinationType.external);
     });
   });

@@ -264,6 +264,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  food_app_common:
+    dependency: "direct main"
+    description:
+      path: "../../packages/food_app_common"
+      relative: true
+    source: path
+    version: "0.0.1"
   glob:
     dependency: transitive
     description:
