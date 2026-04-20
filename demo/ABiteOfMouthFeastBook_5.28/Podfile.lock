@@ -1,0 +1,32 @@
+PODS:
+  - Adjust (5.4.0):
+    - Adjust/Adjust (= 5.4.0)
+  - Adjust/Adjust (5.4.0):
+    - AdjustSignature (= 3.35.2)
+  - AdjustSignature (3.35.2)
+  - AppsFlyerFramework (6.17.0):
+    - AppsFlyerFramework/Main (= 6.17.0)
+  - AppsFlyerFramework/Main (6.17.0)
+  - Reachability (3.7.6)
+
+DEPENDENCIES:
+  - Adjust
+  - AppsFlyerFramework
+  - Reachability
+
+SPEC REPOS:
+  trunk:
+    - Adjust
+    - AdjustSignature
+    - AppsFlyerFramework
+    - Reachability
+
+SPEC CHECKSUMS:
+  Adjust: a5f881d0cbfe9a6df979b076dc7116fe19ece797
+  AdjustSignature: 23b9e5d4adcadffc303bb6b410fde617dd88504f
+  AppsFlyerFramework: 34cef9f9653f4fd01c27d4d87784425b9271f82f
+  Reachability: fd0ecd23705e2599e4cceeb943222ae02296cbc6
+
+PODFILE CHECKSUM: 6bf0d433a8beebadd640caf00364a53211f47685
+
+COCOAPODS: 1.15.2

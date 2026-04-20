@@ -1,0 +1,6 @@
+framework module Pods_ABiteOfMouthFeastBook {
+  umbrella header "Pods-ABiteOfMouthFeastBook-umbrella.h"
+
+  export *
+  module * { export * }
+}
