@@ -15,6 +15,9 @@ description: Creates a production-like Flutter iOS jacket app under apps/ with a
 
 - 在 `apps/<app_name>/` 创建一个**真实可用**的 Flutter app（iOS 目标可编译）
 - **语言要求（硬性）**：生成的 app 需要 **全英文**（UI 文案、页面标题、按钮/提示、空状态、设置项、README 的产品说明与功能清单）。代码技术标识（类名/变量名/文件名/依赖名）保持原样，不要中文化。
+- **命名要求（硬性）**：生成的应用名称要尽可能“真实产品化”：
+  - 目录名（`apps/<app_name>`）避免包含：`jacket`、`demo`、`test`、`sample`、`example`、`tmp`
+  - 产品名（README/页面标题/应用内标题）使用英文 Title Case（1–3 词），避免 snake_case
 - 默认情况下（用户未指定主题），由 LLM 自动生成一个合理的 app 主题，并给出完整 UI/配色/交互
 - 具备最小闭环能力：可新增/编辑/完成/删除（按主题定义）、本地持久化、基础设置页
 - app 集成 `food_app_common`：启动进入 `BootPage` → `BootCoordinator` 走 remote-config 决策；当决策为 local 时进入“真实应用”主页
@@ -33,6 +36,7 @@ description: Creates a production-like Flutter iOS jacket app under apps/ with a
 ### 1) 创建 app 目录与 Flutter 工程
 
 - 确认目标路径不存在：`apps/<app_name>/`
+- 若用户未提供 `app_name`，则由 LLM 自动生成一个更像真实产品的目录名（2–3 个英文单词组成的 lower_snake_case），并同时生成一个 Title Case 产品名写入 README
 - 创建 Flutter 工程（推荐）：`flutter create apps/<app_name>`
 - 保持仓库结构一致：不要把工程创建到仓库根目录
 
@@ -80,11 +84,21 @@ description: Creates a production-like Flutter iOS jacket app under apps/ with a
 - 至少包含 3 个页面：
   - Home（核心操作与列表/统计）
   - Detail/Edit（新增/编辑）
-  - Settings（主题色/目标值/导出或重置等）
+  - Settings（必须与主题强绑定的设置项）
 - 设计要求：
   - 有明确的色彩系统（primary/secondary/surface/error）
   - 使用 Material 3（ThemeData/useMaterial3）
   - 列表、空状态、表单校验、Snackbar/Dialogs 等交互完备
+
+#### 4.2.1 Settings 页差异化约束（硬性，避免“每个 app 都长一样”）
+
+- Settings 页必须包含**至少 2 个与本 app 产品概念强绑定**的设置项，并且真正影响行为/UI（例如默认模式、排序规则、提醒策略、难度/节奏、单位/阈值、模板偏好、显示密度等），且需持久化。
+- Settings 页**禁止**使用同构模板（例如固定的“Appearance 颜色 ChoiceChip + Reset all data + About”三段式）作为主要结构；允许包含“Reset/关于”，但不能成为唯一内容且布局需变化。
+- Settings 页建议采用**不同的组件组合/结构**来体现差异：
+  - `SwitchListTile` / `RadioListTile` / `SegmentedButton`
+  - `Slider` + 实时预览卡片（preview card）
+  - “Defaults / Behaviors / Privacy / Advanced”分组卡片（cards）
+  - 导入/导出（JSON/文本）或“快速配置”向导入口
 
 #### 4.3 数据模型与持久化（必须落地）
 

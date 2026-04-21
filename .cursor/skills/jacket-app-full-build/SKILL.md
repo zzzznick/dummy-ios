@@ -17,12 +17,20 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 ## Hard requirements
 
 - **Language**: App UI + page titles + buttons + empty states + settings + README product section MUST be **English only**.
+- **Naming realism**: Generate names that look like real products.
+  - App folder name (`apps/<app_name>`) should be **neutral** and not include: `jacket`, `demo`, `test`, `sample`, `example`, `tmp`.
+  - App display name (iOS `CFBundleDisplayName`, Android label), README product name, and in-app titles should be **brandable** (1–3 words), not snake_case.
+  - Avoid obvious LLM artifacts: "AI", "Cursor", "Generated", "Template".
 - **Theme randomness**: If user didn’t specify a theme, **randomly generate a theme**.
 - **Diversity**: Random theme MUST be a distinct product type and **NOT** a journal/tracker/check-in app.
   - Home information architecture MUST NOT be “linear list + FAB”.
   - Core entity/model MUST be meaningfully different from prior generated apps.
 - **Offline-first**: No backend required. Everything works locally.
 - **Minimum pages**: Home + Detail/Edit + Settings.
+- **Settings uniqueness (avoid same UI across apps)**:
+  - The Settings screen MUST include **at least 2 settings that are specific to the app’s product concept** (not just theme color + reset).
+  - The Settings screen layout MUST NOT be a copy of prior generated apps (avoid the same “Appearance seed color chips + Reset all data + About” structure).
+  - Use **different widgets/structure** when possible (e.g. segmented control, sliders, reorderable preferences, preview cards, import/export, default behaviors) and tie them to persisted settings.
 - **Persistence**: Use light persistence (`shared_preferences` or JSON file). Must persist both user data and settings.
 - **Boot**: Use `food_app_common` `BootPage → BootCoordinator → RemoteConfigClient`.
 - **Remote**:
@@ -34,7 +42,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 ## Inputs
 
 Collect from user when provided; otherwise generate reasonable defaults:
-- `app_name` (required if user gives; else generate)
+- `app_name` (required if user gives; else generate a realistic one)
 - Jacket type: tool / game (default random; write into README)
 - `remote_url` endpoint (optional; if missing, generate a unique placeholder)
 - Optional theme (if user specifies, follow it; else random)
@@ -44,6 +52,9 @@ Collect from user when provided; otherwise generate reasonable defaults:
 ### 1) Create the app project
 
 - Ensure `apps/<app_name>/` doesn’t exist.
+- If the user didn’t provide an `app_name`, generate:
+  - folder name: lower_snake_case (2–3 words) like `focus_compass`, `pack_pal`, `spark_timer`
+  - product name: Title Case (1–3 words) like "Focus Compass"
 - Run: `flutter create apps/<app_name>`.
 
 ### 2) Build the “real app” (English-only)
@@ -53,6 +64,9 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - Material 3 theme with consistent color scheme.
   - Empty states, form validation, dialogs/snackbars.
 - Implement the feature set with persistence.
+- **State + navigation (avoid “stale UI” bugs)**:
+  - If a screen uses `ChangeNotifier` / async-loaded model data, **every route that reads live state must subscribe** (e.g. wrap the page in `ListenableBuilder` / `AnimatedBuilder`, or `Provider` + `context.watch`).
+  - Parent-only listeners (e.g. home wrapped in `AnimatedBuilder`) do **not** rebuild **pushed** child routes; detail/list pages need their own subscription.
 - Produce a clean structure:
   - `lib/app/` (theme/settings)
   - `lib/features/<feature>/...` (pages, models, storage)
@@ -105,6 +119,10 @@ Rules:
 
 ### 6) Validation (don’t get stuck)
 
+- Manually sanity-check **one interactive loop per main screen** (tap toggles, save, navigate away/back) so “notifyListeners but UI stuck until pop” issues are caught early.
+- Manually sanity-check Settings:
+  - Changing each setting updates UI immediately and persists after app restart.
+  - Settings options and layout are clearly **theme-specific** and do not look like the previous app’s Settings.
 - Always run: `cd apps/<app_name> && flutter test`.
 - Optional: `flutter build ios --no-codesign`.
   - If build hangs at `pod install` for too long, stop waiting and finish with:
