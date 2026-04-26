@@ -43,6 +43,7 @@ class _GaugeGridAppState extends State<GaugeGridApp> with WidgetsBindingObserver
       ),
     );
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gauge Grid',
       theme: theme,
       home: const BootPage(),
