@@ -1,0 +1,41 @@
+name: gauge_grid
+description: "Gauge Grid — place measurements on a grid, save boards, and convert units."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  app_common:
+    path: ../../packages/app_common
+  dio: ^5.9.2
+  connectivity_plus: ^7.1.1
+  webview_flutter: ^4.13.1
+  url_launcher: ^6.3.2
+  shared_preferences: ^2.5.5
+  path_provider: ^2.1.5
+  app_tracking_transparency: ^2.0.6+1
+  path: ^1.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/app_icon.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/app_icon.png
+  adaptive_icon_foreground: assets/app_icon.png
+  adaptive_icon_background: "#E0F2F1"
+  remove_alpha_ios: true

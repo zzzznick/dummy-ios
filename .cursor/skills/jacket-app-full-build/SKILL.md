@@ -1,6 +1,6 @@
 ---
 name: jacket-app-full-build
-description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least three visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url + keyset + README, Chinese review doc 马甲包复核说明.md, and iOS Info.plist (ATT). Use for one-shot jacket app build.
+description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least three visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url + keyset + README, Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), and app icon rules (1:1/满框, cartoon-leaning; app icon MUST use an animal mascot—default random one of 虎牛兔鼠龙). Use for one-shot jacket app build.
 ---
 
 # One-shot Flutter iOS 马甲包生成（全流程）
@@ -50,6 +50,12 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - README must include endpoint + mapping + response example.
   - The Chinese review doc (`马甲包复核说明.md`) MUST also include the **same** random-key **field mapping** and **`remote_url` response example** as `README.md` (see “中文复核文档” below).
 - **iOS privacy**: `apps/<app>/ios/Runner/Info.plist` MUST include `NSUserTrackingUsageDescription` (ATT).
+- **App icon（文生图规范，与 step 3 一致）**：
+  - **强制**：launcher / `app_icon` **必须**以**动物**为视觉主体（纯几何、无生命的物体、无动物形象的抽象 logo **不可**作为唯一主体）。
+  - 优先 **1:1 方图** 素材、**「满框」**（约 80%+ 画幅、少留白、**完整动物**在景别内、无字无商标），风格 **偏卡通**（3D chibi / 软萌矢量均可，非写实照片堆边）。
+  - 若用户/流程**未**指定用哪一种动物，**须从** **虎 / 牛 / 兔 / 鼠 / 龙** 中 **随机恰选一种**作吉祥物；英文 brief 与 `马甲包复核说明.md` 的提示词**必须写出本包选定的动物**及卡通要求。**同一 icon 内只使用一种**动物，不拼五种。
+  - 若产品为工具/乐器等，可让动物**与道具互动**（如兔持吉他、龙扶调色盘），但**不得**用非动物形象**替代**动物主体；动物仍须占主视觉。
+  - 横版出图落地：**最大内接正方居中裁** 至 1024²；**禁止**大 letterbox 上下条—详见 step 3 的 `sips` 流程。
 - **中文复核文档（本流程强制，与 English README 并列）**：
   - 在 `apps/<app_name>/` 下**只使用一个**固定文件：`马甲包复核说明.md`（全中文，便于人工复核）。
   - 该文件必须**统一收录**以下三块内容（可分段，不得拆成多个文档）：
@@ -58,15 +64,16 @@ Use this skill when the user wants **one command / one skill** to finish the ent
        - **字段映射**：与 README 同款的 `### Mapping (random key → semantic field)` 代码块（随机 key → 语义字段）。
        - **响应示例**：与 README 同款的 `### \`remote_url\` response example (first item is used)` 代码块（JSON 数组，首对象含本包随机键名前缀 + 占位值；生成器在 step 5 的 stdout 与 README 片段中已给出，应原样写入复核文件以便离线核对 MockAPI/远端配置）。
        - **须重复写出完整 endpoint 一行 URL**；不得仅写「见 README」而省略上述两段 JSON 示例（复核文件应可**单独打开**即完成 remote 联调参照）。
-    3. **文生图 App Icon 文案**：根据**当前主题与产品概念**用中文写 1–2 组**可直接贴给文生图模型**的提示词；每组需包含：主体/象征物、风格（如扁平/微渐变/线稿）、情绪与主色、**禁止出现文字/商标**、**小尺寸可辨** 等约束；若 step 3 的英文 icon brief 与中文提示为同一设计意图，可注明对应关系。
+    3. **文生图 App Icon 文案**：**必须**写动物吉祥物（本包所选**虎/牛/兔/鼠/龙**之一，或 step 3 中明确的单一种动物）+ **偏卡通、满框/1:1 方图**、无字无商标、小尺寸可辨；可与产品道具组合，但**动物为主**。并注明**横图**时**内接方裁、勿大 letterbox**；与 step 3 的英文 icon brief 一致。
 
 ## Inputs
 
 Collect from user when provided; otherwise generate reasonable defaults:
 - `app_name` (required if user gives; else generate a realistic one)
 - Jacket type: tool / game (default random; write into README)
-- `remote_url` endpoint (optional; if missing, generate a unique placeholder)
+- `remote_url` endpoint (optional; if missing, give a unique placeholder)
 - Optional theme (if user specifies, follow it; else random)
+- Optional **app icon** preference: user may name **one** of **虎/牛/兔/鼠/龙** (or one specific animal) as mascot; if unspecified, use Hard requirements (**random one of the five** zodiac). Icon **always** features an **animal** (no non-animal-only icons).
 
 ## Execution steps (do in order)
 
@@ -96,19 +103,35 @@ Collect from user when provided; otherwise generate reasonable defaults:
 
 ### 3) Generate a theme-fitting app icon (automatic)
 
-- Create an icon brief from the product concept (English, 1–3 sentences):
-  - subject (what the app is about)
-  - style (flat/vector/gradient/outlined), mood, and primary colors
-  - constraints: no text, centered glyph, high contrast, works at small sizes
-- **Update `apps/<app_name>/马甲包复核说明.md`**（与 Hard requirements 中的「中文复核文档」一致）：在 **「文生图 App Icon 提示词」** 小节写入中文文生图提示词（1–2 组），与上一步 English brief 设计意图对齐。
-- Generate a **1024×1024 PNG** (square) and save it in the app as:
-  - `apps/<app_name>/assets/app_icon.png`
-- Add launcher icons tooling to `apps/<app_name>/pubspec.yaml`:
-  - `dev_dependencies: flutter_launcher_icons: ^0.14.4` (or latest)
-  - `flutter_icons:` config pointing to `assets/app_icon.png` for iOS+Android
-- Run from the app directory:
-  - `flutter pub get`
-  - `dart run flutter_launcher_icons`
+- **Mascot (required)**: the app icon **must** depict an **animal** as the main subject. **No** “logo-only” or object-only icon without a visible animal.
+- **Which animal**:
+  1. If the user (Inputs) **named** one of **虎/牛/兔/鼠/龙** or one specific animal, use that **single** species.
+  2. Otherwise, **randomly pick exactly one** of **Tiger, Ox, Rabbit, Rat, Dragon** (虎 / 牛 / 兔 / 鼠 / 龙).
+  3. You **may** add product-themed props the animal holds or wears (e.g. guitar pick, color drops), but the **animal remains the primary focal subject**.
+- State the chosen animal in both the **English** icon brief and the **Chinese** prompts in `马甲包复核说明.md`.
+- Create an **English icon brief** (1–3 sentences) and embed these **image-generation rules** in both the brief and the Chinese prompts you write to `马甲包复核说明.md`:
+  - **Style**: **Cartoon-leaning** (e.g. cute **3D chibi**, soft stylized 3D, or clean vector—not photoreal wildlife). Optional small props (e.g. tribal headband, toy drum, product-relevant item in paws) are OK; keep legible at small size.
+  - **Output shape**: Request **1:1 square** and **tight “full-bleed” / 满框 composition** (the **animal** + props **fill most of the frame**—e.g. ~80%+ area; **entire** animal **in frame** where possible—ears/tail/limb tips inside the square **unless** a deliberate tighter crop; **minimal** background / soft bokeh in corners only; “app store icon, no letterboxing bands”).
+  - **Constraints**: no text, no logo, high contrast, legible at ~64px, edge-safe for iOS squircle (avoid mock phone frames, avoid critical detail only in the extreme corners).
+- **Update `apps/<app_name>/马甲包复核说明.md`**: add **「文生图 App Icon 提示词」** with 1–2 copy-pastable **Chinese** prompts: **动物主体**、**本包选定的** **虎/牛/兔/鼠/龙**（或本包指定的一种动物）、**卡通感、1:1、主体满框、少留白、无字无商标**; optional line on pairing with a product prop. Add one line: widescreen exports use **center square crop**, not top/bottom padding (see below).
+- **Generate** the art (model/tool may ignore aspect ratio), then **normalize to a 1024×1024 master** at `apps/<app_name>/assets/app_icon.png`:
+
+  1. **Check dimensions** (macOS): `sips -g pixelWidth -g pixelHeight <path>`.
+  2. **If already square** (width = height): `sips -z 1024 1024 <source.png> -o apps/<app_name>/assets/app_icon.png` (or your preferred sharp resize).
+  3. **If widescreen** (e.g. **1376×768** is common from some image models): do **not** “letterbox to square” with large top/bottom bars—that produces a **thin horizontal band** on the iOS home screen. Instead use the **largest axis-aligned centered square** that fits inside the bitmap—typically **the full height and cropped sides**:
+     - For **W×H** with **W > H**: crop **H×H** with **vertical offset 0** and **horizontal offset (W−H)/2**:
+       - `sips -c <H> <H> --cropOffset 0 <(W-H)/2> <source.png> -o /tmp/sq.png`
+     - For **H > W**, swap the logic (full width, crop top/bottom); offset order follows `sips` on the host.
+     - Then: `sips -z 1024 1024 /tmp/sq.png -o apps/<app_name>/assets/app_icon.png`
+  4. **Optional**: save the raw wide export as `assets/app_icon_source_wide.png` in the app folder (not required in `pubspec` assets) so the same crop can be re-run without losing the original.
+  5. **Tighter crops** (more zoom, less background) **clip** the subject—use only if the product owner explicitly wants to drop edge bokeh; default pipeline above keeps the **full character** in frame.
+
+- **pubspec**:
+  - `dev_dependencies: flutter_launcher_icons: ^0.14.3` (or `^0.14.4`)
+  - `flutter_launcher_icons:` in `pubspec.yaml`: `image_path: assets/app_icon.png`, iOS+Android; for Android **adaptive** set a **solid** `adaptive_icon_background` (e.g. `#ECEFF1` or a warm tone matching the art) and the same `app_icon` as `adaptive_icon_foreground` if you do not use a split foreground layer.
+- Run: `cd apps/<app_name> && flutter pub get && dart run flutter_launcher_icons`
+
+- **README (English)**: one short “App icon” note—**animal mascot required** (default one of the five zodiac or as specified in step 3), square 1024² master, **widescreen = center-crop to square, not letterbox**, then `flutter_launcher_icons` (and optional wide source path, if saved).
 
 ### 4) Integrate `app_common` boot flow
 
@@ -148,7 +171,8 @@ Rules:
 
 ### 7) Validation (don’t get stuck)
 
-- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认三节齐全且为中文：**马甲包功能**（含**除设置外 ≥3 个主区块**说明）、**`remote_url` / 端点定义**（含完整 endpoint 字符串、与 README **同款**的**随机字段映射**与**响应示例 JSON**）、**文生图 App Icon 提示词**。
+- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认三节齐全且为中文：**马甲包功能**（含**除设置外 ≥3 个主区块**说明）、**`remote_url` / 端点定义**（含完整 endpoint 字符串、与 README **同款**的**随机字段映射**与**响应示例 JSON**）、**文生图 App Icon 提示词**（**必须为动物**、标明**虎/牛/兔/鼠/龙**中本包选用的一种或指定动物、**卡通+满框/1:1**、**横图内接方裁、勿大 letterbox**；与 step 3 一致）。
+- **App icon 文件**：`sips -g pixelWidth -g pixelHeight apps/<app_name>/assets/app_icon.png` 应为 **1024×1024**；若用横版母图，确认未用上下条带 letterbox 生成该文件。
 - **Primary blocks (non-Settings)**: After a cold launch, confirm **at least three** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
 - **Booting**: Open the app once and confirm the boot screen is **not** a generic single-line `Booting` / bare centered spinner only; it should be clearly different from a template `BootPage` and aligned with the app theme.
 - Manually sanity-check **one interactive loop per main screen** (tap toggles, save, navigate away/back) so “notifyListeners but UI stuck until pop” issues are caught early.
@@ -166,7 +190,7 @@ Rules:
 After completion, summarize:
 - App path: `apps/<app_name>/`
 - What product was generated (English name + one-liner)
-- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：功能含 ≥3 主区块、`remote_url` 含 endpoint+映射+与 README 一致的**随机响应示例**、文生图 Icon 提示词）
+- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：功能含 ≥3 主区块、`remote_url` 含 endpoint+映射+与 README 一致的**随机响应示例**、文生图 Icon **动物吉祥物**+**虎牛兔鼠龙择一**或指定动物+**卡通+满框/1:1**）
 - Confirm **≥3 visible primary product blocks** (excluding Settings) are implemented and documented
 - Briefly describe the **Booting** look (layout + motion), or state that it is text-free visual-only
 - Where to change endpoint/keyset
