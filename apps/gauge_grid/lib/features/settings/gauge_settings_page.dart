@@ -78,7 +78,7 @@ class _GaugeSettingsPageState extends State<GaugeSettingsPage> {
           const Text('About', style: TextStyle(fontWeight: FontWeight.w600)),
           const SizedBox(height: 4),
           Text(
-            'Gauge Grid stores your boards on device only. Remote config (remote_url) can steer shell routing when you host JSON on your endpoint.',
+            'Gauge Grid stores your boards on device only.',
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],

@@ -17,6 +17,9 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 ## Hard requirements
 
 - **Language**: App UI + page titles + buttons + empty states + settings + README product section MUST be **English only**.
+- **No `remote_url` copy in App UI (mandatory)**:
+  - The shipped app UI MUST NOT contain any user-facing copy that mentions: `remote_url`, "remote config", "endpoint", "MockAPI", or displays the endpoint URL.
+  - Allowed locations for `remote_url` / endpoint / mapping text are **documentation only**: `README.md` and `马甲包复核说明.md`, plus code constants/files under `lib/boot/`.
 - **Naming realism**: Generate names that look like real products.
   - App folder name (`apps/<app_name>`) should be **neutral** and not include: `jacket`, `demo`, `test`, `sample`, `example`, `tmp`.
   - App display name (iOS `CFBundleDisplayName`, Android label), README product name, and in-app titles should be **brandable** (1–3 words), not snake_case.
