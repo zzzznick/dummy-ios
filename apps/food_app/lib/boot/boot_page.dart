@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_app_common/food_app_common.dart';
+import 'package:app_common/app_common.dart';
 
 import '../local_tabs/local_tabs_page.dart';
 import 'remote_config_keys.dart';

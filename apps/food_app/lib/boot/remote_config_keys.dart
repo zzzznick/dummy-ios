@@ -1,4 +1,4 @@
-import 'package:food_app_common/food_app_common.dart';
+import 'package:app_common/app_common.dart';
 
 const RemoteConfigKeys remoteConfigKeys = RemoteConfigKeys(
   url: 'url',

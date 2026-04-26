@@ -21,7 +21,7 @@
 
 ### Decision: 引入 `RemoteConfigKeys` 并作为解析依赖注入
 - **Choice**: 增加一个 `RemoteConfigKeys`（keyset）数据结构，包含每个语义字段对应的“远端 JSON key 字符串”。`RemoteConfigItem.tryFromDynamic()` 接收 `RemoteConfigKeys` 参数并按 keyset 取值。
-- **Rationale**: 将“远端协议字段名”从解析实现中剥离，使每包可替换且不污染 `food_app_common` 的业务语义模型。
+- **Rationale**: 将“远端协议字段名”从解析实现中剥离，使每包可替换且不污染 `app_common` 的业务语义模型。
 - **Alternatives**:
   - 在解析处硬编码多套 key：会在 common 包里留下明文 key，且不利于每包随机化。
   - 远端返回额外 `mapping` 字段：会暴露映射本身，且增加协议复杂度。
@@ -44,7 +44,7 @@
 
 ## Migration Plan
 
-- 第一步：为 `food_app_common` 增加 `RemoteConfigKeys` 注入点，并将解析从固定 key 改为 keyset 读取。
+- 第一步：为 `app_common` 增加 `RemoteConfigKeys` 注入点，并将解析从固定 key 改为 keyset 读取。
 - 第二步：在现有 app（`apps/food_app`）内置一套默认 keyset（用于本仓库 demo/开发）。
 - 第三步：在马甲包生成流程中为每个新包生成随机 keyset 与 README 映射说明；远端 mock/配置按 README 调整字段名。
 - 回滚：保留旧实现分支/或启用“兼容旧字段”开关（仅在需要时），确保可快速回退解析策略。

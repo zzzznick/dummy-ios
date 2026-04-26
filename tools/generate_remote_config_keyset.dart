@@ -117,7 +117,7 @@ String _renderDart(Map<String, String> mapping, {required bool compat}) {
 
   // Keep the file stable and easy to grep: `remoteConfigKeys` constant.
   final lines = <String>[
-    "import 'package:food_app_common/food_app_common.dart';",
+    "import 'package:app_common/app_common.dart';",
     '',
     'const RemoteConfigKeys remoteConfigKeys = RemoteConfigKeys(',
     "  url: '${bySemantic['url']}',",

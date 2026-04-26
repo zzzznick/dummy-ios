@@ -21,5 +21,5 @@
 
 ## Impact
 
-- 影响模块：`packages/food_app_common/lib/remote_config/*`、启动链路中构造 `RemoteConfigClient`/解析 `RemoteConfigItem` 的位置、以及马甲包生成流程（生成 `RemoteConfigKeys` 与 README）。
+- 影响模块：`packages/app_common/lib/remote_config/*`、启动链路中构造 `RemoteConfigClient`/解析 `RemoteConfigItem` 的位置、以及马甲包生成流程（生成 `RemoteConfigKeys` 与 README）。
 - 行为影响：远端响应 JSON 的 key 将变为“马甲包专属随机 key”，远端配置需要按 README 指引调整字段名。

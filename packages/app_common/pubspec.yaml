@@ -1,4 +1,4 @@
-name: food_app_common
+name: app_common
 description: "Shared boot/analytics/web-shell/ATT modules for white-label apps."
 version: 0.0.1
 homepage:

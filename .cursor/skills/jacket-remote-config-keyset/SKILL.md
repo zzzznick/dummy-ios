@@ -14,7 +14,7 @@ description: Generates per-app remote_url endpoint + remote-config random field 
 
 ## 前置条件（仓库内已提供）
 
-- `food_app_common` 已支持通过 `RemoteConfigKeys` 注入解析 remote-config
+- `app_common` 已支持通过 `RemoteConfigKeys` 注入解析 remote-config
 - 生成工具：`tools/generate_remote_config_keyset.dart`
 
 ## 输入

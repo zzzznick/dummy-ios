@@ -1,9 +1,9 @@
-## 1. Spec & wiring in `food_app_common`
+## 1. Spec & wiring in `app_common`
 
 - [x] 1.1 Introduce `RemoteConfigKeys` data structure for remote-config JSON keys
 - [x] 1.2 Update `RemoteConfigItem.tryFromDynamic()` to accept `RemoteConfigKeys` and parse values via the injected keyset
 - [x] 1.3 Update `RemoteConfigClient.fetchFirstItem()` (or constructor) to accept/inject `RemoteConfigKeys` and pass it into parsing
-- [x] 1.4 Ensure `food_app_common` no longer contains fixed plaintext JSON key strings for remote-config parsing (e.g. `'url'`, `'platform'`)
+- [x] 1.4 Ensure `app_common` no longer contains fixed plaintext JSON key strings for remote-config parsing (e.g. `'url'`, `'platform'`)
 - [x] 1.5 Add/adjust unit tests for remote-config parsing with keyset (happy path + missing keys)
 
 ## 2. App-level default keyset (repo demo)

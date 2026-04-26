@@ -9,6 +9,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "5.6.1"
+  app_common:
+    dependency: "direct main"
+    description:
+      path: "../../packages/app_common"
+      relative: true
+    source: path
+    version: "0.0.1"
   app_tracking_transparency:
     dependency: "direct main"
     description:
@@ -264,13 +271,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  food_app_common:
-    dependency: "direct main"
-    description:
-      path: "../../packages/food_app_common"
-      relative: true
-    source: path
-    version: "0.0.1"
   glob:
     dependency: transitive
     description:

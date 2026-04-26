@@ -41,7 +41,7 @@
 
 ### 1) 单一公共 package + 内部模块化
 
-**Decision：** 新增 `packages/food_app_common/`（名称可在实现阶段最终确定），在 `lib/` 下按能力分目录：
+**Decision：** 新增 `packages/app_common/`（名称可在实现阶段最终确定），在 `lib/` 下按能力分目录：
 
 - `lib/boot/*`
 - `lib/remote_config/*`
