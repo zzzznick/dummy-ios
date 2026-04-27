@@ -1,35 +1,33 @@
 import 'dart:io';
 import 'dart:math';
 
-/// Generates per-app `remote_config_keys.dart` and a README snippet.
+/// Generates per-app `remote_config_spec.dart` and a README snippet.
 ///
 /// Usage:
-///   dart run tools/generate_remote_config_keyset.dart <app_dir> [prefix] [--force] [--compat] [--endpoint <url>]
+///   dart run tools/generate_remote_config_keyset.dart <app_dir> [prefix] [--force] [--endpoint <url>]
 ///
 /// Example:
 ///   dart run tools/generate_remote_config_keyset.dart apps/my_jacket
 ///
 /// Output:
-/// - Writes: <app_dir>/lib/boot/remote_config_keys.dart
-/// - Writes: <app_dir>/lib/boot/remote_config_endpoint.dart (if --endpoint is provided, or if missing)
+/// - Writes: <app_dir>/lib/boot/remote_config_spec.dart
 /// - Prints: a markdown snippet (mapping + remote_url example)
 void main(List<String> args) {
   if (args.isEmpty) {
     stderr.writeln(
-      'Usage: dart run tools/generate_remote_config_keyset.dart <app_dir> [prefix] [--force] [--compat] [--endpoint <url>]',
+      'Usage: dart run tools/generate_remote_config_keyset.dart <app_dir> [prefix] [--force] [--endpoint <url>]',
     );
     exitCode = 64;
     return;
   }
 
   final force = args.contains('--force');
-  final compat = args.contains('--compat');
   final endpoint = _readFlagValue(args, '--endpoint');
 
   final filtered = <String>[];
   for (var i = 0; i < args.length; i++) {
     final a = args[i];
-    if (a == '--force' || a == '--compat') continue;
+    if (a == '--force') continue;
     if (a == '--endpoint') {
       i++; // skip value
       continue;
@@ -55,54 +53,39 @@ void main(List<String> args) {
       ? filtered[1].trim()
       : _randomPrefix();
 
-  final mapping = <String, String>{
-    '${prefix}Ur': 'url',
-    '${prefix}Plaf': 'platform',
-    '${prefix}Inpjp': 'inappjump',
-    '${prefix}Enty': 'eventtype',
-    '${prefix}Afky': 'afkey',
-    '${prefix}Aid': 'appid',
-    '${prefix}Adky': 'adkey',
-    '${prefix}Adelist': 'adeventlist',
-  };
+  final endpointValue = (endpoint?.trim().isNotEmpty ?? false)
+      ? endpoint!.trim()
+      : 'https://example.com/remote-config/$appName';
 
-  final dartFile = File('${libBootDir.path}/remote_config_keys.dart');
-  if (dartFile.existsSync() && !force) {
+  final specFile = File('${libBootDir.path}/remote_config_spec.dart');
+  if (specFile.existsSync() && !force) {
     stderr.writeln(
-      'Refusing to overwrite existing file: ${dartFile.path}\n'
+      'Refusing to overwrite existing file: ${specFile.path}\n'
       'Re-run with --force if you intend to replace it.',
     );
     exitCode = 73;
     return;
   }
-  dartFile.writeAsStringSync(_renderDart(mapping, compat: compat));
 
-  final endpointFile = File('${libBootDir.path}/remote_config_endpoint.dart');
-  final endpointValue = (endpoint?.trim().isNotEmpty ?? false)
-      ? endpoint!.trim()
-      : 'https://example.com/remote-config/$appName';
-  if (!endpointFile.existsSync() || force || endpoint != null) {
-    if (endpointFile.existsSync() && !force && endpoint == null) {
-      // Keep existing endpoint if caller didn't request overwrite.
-    } else if (endpointFile.existsSync() && !force && endpoint != null) {
-      stderr.writeln(
-        'Refusing to overwrite existing file: ${endpointFile.path}\n'
-        'Re-run with --force if you intend to replace it.',
-      );
-      exitCode = 73;
-      return;
-    } else {
-      endpointFile.writeAsStringSync(_renderEndpointDart(endpointValue));
-    }
+  specFile.writeAsStringSync(_renderSpecDart(prefix, endpointValue));
+
+  final spec = _parseSpec(specFile.readAsStringSync());
+  if (spec == null) {
+    stderr.writeln('Failed to parse generated spec: ${specFile.path}');
+    exitCode = 70;
+    return;
   }
 
-  stdout.writeln(_renderReadmeSnippet(mapping, endpointValue));
+  stdout.writeln(_renderReadmeSnippetFromSpec(spec));
 }
 
 String _randomPrefix() {
   const letters = 'abcdefghijklmnopqrstuvwxyz';
   final rnd = Random.secure();
-  return List<String>.generate(5, (_) => letters[rnd.nextInt(letters.length)]).join();
+  return List<String>.generate(
+    5,
+    (_) => letters[rnd.nextInt(letters.length)],
+  ).join();
 }
 
 String? _readFlagValue(List<String> args, String flag) {
@@ -112,62 +95,134 @@ String? _readFlagValue(List<String> args, String flag) {
   return args[idx + 1];
 }
 
-String _renderDart(Map<String, String> mapping, {required bool compat}) {
-  final bySemantic = <String, String>{for (final e in mapping.entries) e.value: e.key};
+String _renderSpecDart(String prefix, String endpoint) {
+  String esc(String s) => s.replaceAll(r'\', r'\\').replaceAll("'", r"\'");
+  final ep = esc(endpoint);
 
-  // Keep the file stable and easy to grep: `remoteConfigKeys` constant.
-  final lines = <String>[
-    "import 'package:app_common/app_common.dart';",
-    '',
-    'const RemoteConfigKeys remoteConfigKeys = RemoteConfigKeys(',
-    "  url: '${bySemantic['url']}',",
-    "  platform: '${bySemantic['platform']}',",
-    "  eventType: '${bySemantic['eventtype']}',",
-    "  afKey: '${bySemantic['afkey']}',",
-    "  appId: '${bySemantic['appid']}',",
-    "  adKey: '${bySemantic['adkey']}',",
-    "  adEventList: '${bySemantic['adeventlist']}',",
-    "  inAppJump: '${bySemantic['inappjump']}',",
-    ');',
-  ];
+  final url = '${prefix}Ur';
+  final platform = '${prefix}Plaf';
+  final inappjump = '${prefix}Inpjp';
+  final eventtype = '${prefix}Enty';
+  final afkey = '${prefix}Afky';
+  final appid = '${prefix}Aid';
+  final adkey = '${prefix}Adky';
+  final adeventlist = '${prefix}Adelist';
 
-  if (compat) {
-    lines.addAll(<String>[
-      '',
-      '/// Optional compatibility fallback for plaintext keys during migration windows.',
-      'const RemoteConfigKeys remoteConfigFallbackKeys = RemoteConfigKeys(',
-      "  url: 'url',",
-      "  platform: 'platform',",
-      "  eventType: 'eventtype',",
-      "  afKey: 'afkey',",
-      "  appId: 'appid',",
-      "  adKey: 'adkey',",
-      "  adEventList: 'adeventlist',",
-      "  inAppJump: 'inappjump',",
-      ');',
-    ]);
-  }
-
-  lines.add('');
-  return lines.join('\n');
-}
-
-String _renderEndpointDart(String endpoint) {
-  final escaped = endpoint.replaceAll(r'\', r'\\').replaceAll("'", r"\'");
   return [
+    "import '../app_common/remote_config/remote_config.dart';",
+    '',
     '/// Remote config endpoint for this app (aka `remote_url`).',
     '///',
     '/// Each jacket app SHOULD use a different endpoint.',
-    "const String remoteConfigEndpoint = '$escaped';",
+    "const String remoteConfigEndpoint = '$ep';",
+    '',
+    '/// Per-app random keyset for remote config.',
+    '///',
+    '/// This app uses random field names; see README / 马甲包复核说明.md for mapping',
+    '/// and a ready-to-copy response example.',
+    'const RemoteConfigKeys remoteConfigKeys = RemoteConfigKeys(',
+    "  url: '$url',",
+    "  platform: '$platform',",
+    "  eventType: '$eventtype',",
+    "  afKey: '$afkey',",
+    "  appId: '$appid',",
+    "  adKey: '$adkey',",
+    "  adEventList: '$adeventlist',",
+    "  inAppJump: '$inappjump',",
+    ');',
     '',
   ].join('\n');
 }
 
-String _renderReadmeSnippet(Map<String, String> mapping, String endpoint) {
-  final bySemantic = <String, String>{for (final e in mapping.entries) e.value: e.key};
+class _Spec {
+  _Spec({
+    required this.endpoint,
+    required this.url,
+    required this.platform,
+    required this.inappjump,
+    required this.eventtype,
+    required this.afkey,
+    required this.appid,
+    required this.adkey,
+    required this.adeventlist,
+  });
 
-  String jsonEscape(String s) => s.replaceAll(r'\', r'\\').replaceAll('"', r'\"');
-  const adEventList = '{"firstDepositArrival":"aaaaa","startTrial":"aaaaa","deposit":"aaaaa","withdraw":"aaaaa","firstOpen":"aaaaa","register":"aaaaa","depositSubmit":"aaaaa","firstDeposit":"aaaaa"}';
+  final String endpoint;
+  final String url;
+  final String platform;
+  final String inappjump;
+  final String eventtype;
+  final String afkey;
+  final String appid;
+  final String adkey;
+  final String adeventlist;
+}
+
+_Spec? _parseSpec(String src) {
+  final endpointMatch = RegExp(
+    r"const\s+String\s+remoteConfigEndpoint\s*=\s*'([^']*)';",
+  ).firstMatch(src);
+  if (endpointMatch == null) return null;
+  final endpoint = endpointMatch.group(1)!;
+
+  String? field(String name) {
+    final m = RegExp("($name)\\s*:\\s*'([^']*)'").firstMatch(src);
+    return m?.group(2);
+  }
+
+  final url = field('url');
+  final platform = field('platform');
+  final inappjump = field('inAppJump');
+  final eventtype = field('eventType');
+  final afkey = field('afKey');
+  final appid = field('appId');
+  final adkey = field('adKey');
+  final adeventlist = field('adEventList');
+
+  if ([
+    url,
+    platform,
+    inappjump,
+    eventtype,
+    afkey,
+    appid,
+    adkey,
+    adeventlist,
+  ].any((e) => e == null)) {
+    return null;
+  }
+
+  return _Spec(
+    endpoint: endpoint,
+    url: url!,
+    platform: platform!,
+    inappjump: inappjump!,
+    eventtype: eventtype!,
+    afkey: afkey!,
+    appid: appid!,
+    adkey: adkey!,
+    adeventlist: adeventlist!,
+  );
+}
+
+String _renderReadmeSnippetFromSpec(_Spec spec) {
+  final endpoint = spec.endpoint;
+
+  String jsonEscape(String s) =>
+      s.replaceAll(r'\', r'\\').replaceAll('"', r'\"');
+  const adEventList =
+      '{"firstDepositArrival":"aaaaa","startTrial":"aaaaa","deposit":"aaaaa","withdraw":"aaaaa","firstOpen":"aaaaa","register":"aaaaa","depositSubmit":"aaaaa","firstDeposit":"aaaaa"}';
+
+  final mapping = <String, String>{
+    spec.url: 'url',
+    spec.platform: 'platform',
+    spec.inappjump: 'inappjump',
+    spec.eventtype: 'eventtype',
+    spec.afkey: 'afkey',
+    spec.appid: 'appid',
+    spec.adkey: 'adkey',
+    spec.adeventlist: 'adeventlist',
+  };
 
   return [
     '## Remote config (`remote_url`)',
@@ -184,14 +239,14 @@ String _renderReadmeSnippet(Map<String, String> mapping, String endpoint) {
     '',
     '```json',
     '{',
-    '  "${mapping.keys.elementAt(0)}": "${mapping.values.elementAt(0)}",',
-    '  "${mapping.keys.elementAt(1)}": "${mapping.values.elementAt(1)}",',
-    '  "${mapping.keys.elementAt(2)}": "${mapping.values.elementAt(2)}",',
-    '  "${mapping.keys.elementAt(3)}": "${mapping.values.elementAt(3)}",',
-    '  "${mapping.keys.elementAt(4)}": "${mapping.values.elementAt(4)}",',
-    '  "${mapping.keys.elementAt(5)}": "${mapping.values.elementAt(5)}",',
-    '  "${mapping.keys.elementAt(6)}": "${mapping.values.elementAt(6)}",',
-    '  "${mapping.keys.elementAt(7)}": "${mapping.values.elementAt(7)}"',
+    '  "${spec.url}": "url",',
+    '  "${spec.platform}": "platform",',
+    '  "${spec.inappjump}": "inappjump",',
+    '  "${spec.eventtype}": "eventtype",',
+    '  "${spec.afkey}": "afkey",',
+    '  "${spec.appid}": "appid",',
+    '  "${spec.adkey}": "adkey",',
+    '  "${spec.adeventlist}": "adeventlist"',
     '}',
     '```',
     '',
@@ -200,18 +255,17 @@ String _renderReadmeSnippet(Map<String, String> mapping, String endpoint) {
     '```json',
     '[',
     '  {',
-    '    "${bySemantic['url']}": "",',
-    '    "${bySemantic['platform']}": "0",',
-    '    "${bySemantic['eventtype']}": "ad",',
-    '    "${bySemantic['inappjump']}": "false",',
-    '    "${bySemantic['afkey']}": "afkeyaaa",',
-    '    "${bySemantic['appid']}": "000000",',
-    '    "${bySemantic['adkey']}": "adkeybbbb",',
-    '    "${bySemantic['adeventlist']}": "${jsonEscape(adEventList)}"',
+    '    "${spec.url}": "",',
+    '    "${spec.platform}": "0",',
+    '    "${spec.eventtype}": "ad",',
+    '    "${spec.inappjump}": "false",',
+    '    "${spec.afkey}": "afkeyaaa",',
+    '    "${spec.appid}": "000000",',
+    '    "${spec.adkey}": "adkeybbbb",',
+    '    "${spec.adeventlist}": "${jsonEscape(adEventList)}"',
     '  }',
     ']',
     '```',
     '',
   ].join('\n');
 }
-

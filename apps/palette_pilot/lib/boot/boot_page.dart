@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app_common/app_common.dart';
 import 'package:flutter/material.dart';
 
+import '../app_common/app_common.dart';
 import '../app/settings/app_settings_controller.dart';
 import '../shell/palette_pilot_shell.dart';
-import 'remote_config_endpoint.dart';
-import 'remote_config_keys.dart';
+import 'remote_config_spec.dart';
 
 class BootPage extends StatefulWidget {
   const BootPage({super.key, required this.settings, this.enableAutoStart = true});

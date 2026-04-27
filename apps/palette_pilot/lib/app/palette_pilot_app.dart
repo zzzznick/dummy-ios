@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:app_common/app_common.dart';
 
 import '../boot/boot_page.dart';
+import '../app_common/att/att_service.dart';
 import 'settings/app_settings_controller.dart';
 import 'settings/app_settings_store.dart';
 import 'theme/palette_theme.dart';

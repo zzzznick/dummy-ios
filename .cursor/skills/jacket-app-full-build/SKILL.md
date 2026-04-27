@@ -11,7 +11,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 - Create a new app under `apps/`
 - Generate a **real, production-like** app experience (not just skeleton) with **≥5 visible primary product blocks** (Settings excluded) per Hard requirements
 - Integrate `app_common` boot flow with a **unique Booting** experience per app
-- Generate **per-app** `remote_url` random keyset + mapping + response example (endpoint is still a direct string constant)
+- Generate **per-app** `remote_url` random keyset + mapping + response example (**code is source of truth** in `lib/boot/remote_config_spec.dart`)
 - Ensure iOS `Info.plist` is safe (must include ATT)
 
 ## Hard requirements
@@ -50,8 +50,9 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - Reuse the app’s **ColorScheme** / `ThemeData` (same seed and typography intent as the home app) so boot feels native to the product, not a generic overlay.
   - If any string is shown, it MUST stay **English** and product-appropriate; do not rely on generic `"Booting"` / `"Loading..."` as the sole differentiator.
 - **Remote**:
-  - Per-app endpoint constant: `lib/boot/remote_config_endpoint.dart` → `remoteConfigEndpoint`
-  - Per-app keyset: `lib/boot/remote_config_keys.dart` → `remoteConfigKeys` (**random keys**)
+  - **Source of truth (mandatory)**: `lib/boot/remote_config_spec.dart`
+    - `remoteConfigEndpoint` (endpoint / `remote_url`)
+    - `remoteConfigKeys` (**random keys**)
   - README must include endpoint + **field mapping** + `remote_url` response example (**random keys**; first item is used).
   - The Chinese review doc (`马甲包复核说明.md`) MUST also include the same endpoint + mapping + response example as `README.md` (see “中文复核文档” below).
 - **iOS privacy**: `apps/<app>/ios/Runner/Info.plist` MUST include `NSUserTrackingUsageDescription` (ATT).
@@ -140,12 +141,10 @@ Collect from user when provided; otherwise generate reasonable defaults:
 
 ### 4) Integrate `app_common` boot flow
 
-- Do NOT reference the repo-level shared module via `../../packages/app_common` in this flow.
-- Instead, **vendor** `app_common` into the new jacket app (template-style import) so the app is self-contained:
-  - Create `apps/<app_name>/packages/` (if missing)
-  - Copy `packages/app_common` into `apps/<app_name>/packages/app_common`
-- Add dependency in `pubspec.yaml`:
-  - `app_common: path: packages/app_common`
+- Do NOT reference the repo-level shared module via `../../packages/app_common`.
+- Instead, **absorb** `app_common` into the app’s `lib/` so `apps/<app_name>` remains a clean, standalone Flutter project:
+  - Create `apps/<app_name>/lib/app_common/` (if missing)
+  - Copy **only** `packages/app_common/lib/**` into `apps/<app_name>/lib/app_common/`
 - Add required runtime deps as needed by the app’s features (e.g. `shared_preferences`).
 - Wire `main.dart` to load settings (if any), then show `BootPage`.
 - `BootPage` MUST route to local home builder (the real app Home) via the existing `BootCoordinator` + `RemoteConfigClient` pattern.
@@ -167,7 +166,8 @@ Rules:
 - If user didn’t provide `<remote_url>`, generate a unique placeholder like:
   - `https://example.com/remote-config/<app_name>`
 - Choose `<prefix>` randomly (5 letters) unless user supplied one.
-- Ensure `BootPage` reads endpoint from `remoteConfigEndpoint` and keys from `remoteConfigKeys`.
+- Generator writes **source-of-truth** code: `apps/<app_name>/lib/boot/remote_config_spec.dart`.
+- Ensure `BootPage` reads endpoint and keys from `remote_config_spec.dart`.
 - Append generator output into `apps/<app_name>/README.md` under a “Remote config (`remote_url`)" section.
 - **Update `apps/<app_name>/马甲包复核说明.md`**：在 **「`remote_url` / 端点定义」** 小节写中文说明，并**粘贴**与 README 相同的**两段 fenced JSON**（随机字段映射 + `remote_url` 响应示例，首项对象）；该内容与生成器在终端打印的 **README snippet 一致，可直接从 step 5 的 stdout 复制**（须含完整 endpoint 字符串；不得依赖“仅见 README”省略示例）。
 
