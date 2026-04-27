@@ -1,6 +1,6 @@
 ---
 name: jacket-app-full-build
-description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least three visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url + keyset + README, Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), and app icon rules (1:1/满框, cartoon-leaning; app icon MUST use an animal mascot—default random one of 虎牛兔鼠龙). Use for one-shot jacket app build.
+description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least five visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url endpoint (direct string edit; no random key mapping), Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), and app icon rules (1:1/满框, cartoon-leaning; app icon MUST use an animal mascot—default random one of 虎牛兔鼠龙). Use for one-shot jacket app build.
 ---
 
 # One-shot Flutter iOS 马甲包生成（全流程）
@@ -9,9 +9,9 @@ description: End-to-end workflow to generate a complete Flutter iOS jacket app: 
 
 Use this skill when the user wants **one command / one skill** to finish the entire jacket app setup:
 - Create a new app under `apps/`
-- Generate a **real, production-like** app experience (not just skeleton) with **≥3 visible primary product blocks** (Settings excluded) per Hard requirements
+- Generate a **real, production-like** app experience (not just skeleton) with **≥5 visible primary product blocks** (Settings excluded) per Hard requirements
 - Integrate `app_common` boot flow with a **unique Booting** experience per app
-- Generate **per-app** `remote_url` endpoint + random field keyset + README mapping
+- Generate **per-app** `remote_url` random keyset + mapping + response example (endpoint is still a direct string constant)
 - Ensure iOS `Info.plist` is safe (must include ATT)
 
 ## Hard requirements
@@ -21,11 +21,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - The app MUST set `debugShowCheckedModeBanner: false` on the root `MaterialApp` / `CupertinoApp` so `flutter run` on simulator/device never shows the top-right DEBUG banner.
 - **No `remote_url` copy in App UI (mandatory)**:
   - The shipped app UI MUST NOT contain any user-facing copy that mentions: `remote_url`, "remote config", "endpoint", "MockAPI", or displays the endpoint URL.
-  - Allowed locations for `remote_url` / endpoint / mapping text are **documentation only**: `README.md` and `马甲包复核说明.md`, plus code constants/files under `lib/boot/`.
-- **Unsigned IPA convenience script (mandatory)**:
-  - The repo MUST include `tools/build_unsigned_ipa.sh` to generate an **unsigned IPA-shaped** artifact (`*_unsign.ipa`) for the app.
-  - Usage: `bash tools/build_unsigned_ipa.sh apps/<app_name>` (from repo root).
-  - This artifact is for **static inspection/unzipping/diffing only** and is **not** installable on iOS devices.
+  - Allowed locations for `remote_url` / endpoint text are **documentation only**: `README.md` and `马甲包复核说明.md`, plus code constants/files under `lib/boot/`.
 - **Naming realism**: Generate names that look like real products.
   - App folder name (`apps/<app_name>`) should be **neutral** and not include: `jacket`, `demo`, `test`, `sample`, `example`, `tmp`.
   - App display name (iOS `CFBundleDisplayName`, Android label), README product name, and in-app titles should be **brandable** (1–3 words), not snake_case.
@@ -37,9 +33,9 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 - **Offline-first**: No backend required. Everything works locally.
 - **Minimum pages + visible primary blocks (Settings excluded from the count)**:
   - You MUST still have **Settings** (full screen or equivalent) and **at least one** **Detail/Edit** (or editor) for the core entity.
-  - You MUST also deliver **at least 3** **visible primary product blocks** *not counting* the Settings entry. A **block** is a distinct, product-meaningful surface the user is expected to use (e.g. a tab, a `NavigationBar`/`TabBar` page, a major dashboard section with its own title + body, a dedicated “guide / lab / list vs map” screen).
-  - **Visibility rule (anti–“one home + settings”)**: Do **not** ship a shell where, on a cold start, the only obvious destinations are *one* home-like screen and *Settings* while all other value lives exclusively behind a push route the user may never open. The **3+ blocks** should be **discoverable** without reading README: e.g. **bottom navigation** or **top tabs** with **3 items** (all non-settings), or a **home dashboard** with **3+ clearly separated primary areas** (titles/sections) each navigable in one obvious gesture.
-  - **Detail/Edit** may count as one of the three *if* it is clearly exposed (e.g. a tab, or a primary list–detail pattern where the “list” is visibly one of three modes). If Detail is only reachable by tapping a row (still OK for depth), the **other two** must still be **obvious** (tabs / second and third top-level feature pages).
+  - You MUST also deliver **at least 5** **visible primary product blocks** *not counting* the Settings entry. A **block** is a distinct, product-meaningful surface the user is expected to use (e.g. a tab, a `NavigationBar`/`TabBar` page, a major dashboard section with its own title + body, a dedicated “guide / lab / list vs map” screen).
+  - **Visibility rule (anti–“one home + settings”)**: Do **not** ship a shell where, on a cold start, the only obvious destinations are *one* home-like screen and *Settings* while all other value lives exclusively behind a push route the user may never open. The **5+ blocks** should be **discoverable** without reading README: e.g. **bottom navigation** or **top tabs** with **5 items** (all non-settings), or a **home dashboard** with **5+ clearly separated primary areas** (titles/sections) each navigable in one obvious gesture.
+  - **Detail/Edit** may count as one of the five *if* it is clearly exposed (e.g. a tab, or a primary list–detail pattern where the “list” is visibly one of five modes). If Detail is only reachable by tapping a row (still OK for depth), the **other four** must still be **obvious** (tabs / other top-level feature pages).
 - **Implied by above**: *Home* (or first tab) is typically block #1; add **2+** more top-level or equally visible surfaces, then keep **Settings** separate (often an app-bar action, not a hidden-only route).
 - **Settings uniqueness (avoid same UI across apps)**:
   - The Settings screen MUST include **at least 2 settings that are specific to the app’s product concept** (not just theme color + reset).
@@ -55,9 +51,9 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - If any string is shown, it MUST stay **English** and product-appropriate; do not rely on generic `"Booting"` / `"Loading..."` as the sole differentiator.
 - **Remote**:
   - Per-app endpoint constant: `lib/boot/remote_config_endpoint.dart` → `remoteConfigEndpoint`
-  - Per-app keyset: `lib/boot/remote_config_keys.dart` → `remoteConfigKeys`
-  - README must include endpoint + mapping + response example.
-  - The Chinese review doc (`马甲包复核说明.md`) MUST also include the **same** random-key **field mapping** and **`remote_url` response example** as `README.md` (see “中文复核文档” below).
+  - Per-app keyset: `lib/boot/remote_config_keys.dart` → `remoteConfigKeys` (**random keys**)
+  - README must include endpoint + **field mapping** + `remote_url` response example (**random keys**; first item is used).
+  - The Chinese review doc (`马甲包复核说明.md`) MUST also include the same endpoint + mapping + response example as `README.md` (see “中文复核文档” below).
 - **iOS privacy**: `apps/<app>/ios/Runner/Info.plist` MUST include `NSUserTrackingUsageDescription` (ATT).
 - **App icon（文生图规范，与 step 3 一致）**：
   - **强制**：launcher / `app_icon` **必须**以**动物**为视觉主体（纯几何、无生命的物体、无动物形象的抽象 logo **不可**作为唯一主体）。
@@ -68,11 +64,11 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 - **中文复核文档（本流程强制，与 English README 并列）**：
   - 在 `apps/<app_name>/` 下**只使用一个**固定文件：`马甲包复核说明.md`（全中文，便于人工复核）。
   - 该文件必须**统一收录**以下三块内容（可分段，不得拆成多个文档）：
-    1. **马甲包功能**：用中文写清产品定位、核心实体、主要页面与交互、与 boot/remote 的衔接方式（读哪些配置、不依赖后端的点）；并**明确列出除设置外至少三个可见主区块**（名称 + 进入方式，与本技能「≥3 visible primary blocks」一致，便于复核）。
-    2. **`remote_url` / 端点定义**：用中文写清本包 `remoteConfigEndpoint` 的完整 URL、字段 keyset 的用途；并**必须收录与 `README.md` 中 Remote config 节一致的两段技术内容**（仅说明文字可中文，JSON 内键名保持英文随机串）：
-       - **字段映射**：与 README 同款的 `### Mapping (random key → semantic field)` 代码块（随机 key → 语义字段）。
-       - **响应示例**：与 README 同款的 `### \`remote_url\` response example (first item is used)` 代码块（JSON 数组，首对象含本包随机键名前缀 + 占位值；生成器在 step 5 的 stdout 与 README 片段中已给出，应原样写入复核文件以便离线核对 MockAPI/远端配置）。
-       - **须重复写出完整 endpoint 一行 URL**；不得仅写「见 README」而省略上述两段 JSON 示例（复核文件应可**单独打开**即完成 remote 联调参照）。
+    1. **马甲包功能**：用中文写清产品定位、核心实体、主要页面与交互、与 boot/remote 的衔接方式（读哪些配置、不依赖后端的点）；并**明确列出除设置外至少五个可见主区块**（名称 + 进入方式，与本技能「≥5 visible primary blocks」一致，便于复核）。
+   2. **`remote_url` / 端点定义**：用中文写清本包 `remoteConfigEndpoint` 的完整 URL、随机字段 keyset 的用途；并**必须收录与 `README.md` 中 Remote config 节一致的两段技术内容**（仅说明文字可中文，JSON 内键名保持随机串英文）：
+      - **字段映射**：与 README 同款的 `### Mapping (random key → semantic field)` 代码块（随机 key → 语义字段）。
+      - **响应示例**：与 README 同款的 `### \`remote_url\` response example (first item is used)` 代码块（JSON 数组，首对象含本包随机键名前缀 + 占位值；用于离线核对远端配置）。
+      - **须重复写出完整 endpoint 一行 URL**；不得仅写「见 README」而省略上述两段 JSON 示例（复核文件应可**单独打开**即完成 remote 联调参照）。
     3. **文生图 App Icon 文案**：**必须**写动物吉祥物（本包所选**虎/牛/兔/鼠/龙**之一，或 step 3 中明确的单一种动物）+ **偏卡通、满框/1:1 方图**、无字无商标、小尺寸可辨；可与产品道具组合，但**动物为主**。并注明**横图**时**内接方裁、勿大 letterbox**；与 step 3 的英文 icon brief 一致。
 
 ## Inputs
@@ -100,8 +96,8 @@ Collect from user when provided; otherwise generate reasonable defaults:
 - Create a coherent UI system:
   - Material 3 theme with consistent color scheme.
   - Empty states, form validation, dialogs/snackbars.
-- Implement the feature set with persistence, including a **main shell** that satisfies **≥3 visible non-Settings primary blocks** (e.g. `NavigationBar` with three destinations, `TabBar`, or a home with three obvious sections each linking to a feature screen—see Hard requirements).
-- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**三个**可见主区块（名称 + 如何进入，如底栏三格 / 首屏三区等），后续步骤会向同一文件追加 `remote_url` 与文生图小节。
+- Implement the feature set with persistence, including a **main shell** that satisfies **≥5 visible non-Settings primary blocks** (e.g. `NavigationBar` with five destinations, `TabBar`, or a home with five obvious sections each linking to a feature screen—see Hard requirements).
+- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**五个**可见主区块（名称 + 如何进入，如底栏五格 / 首屏五区等），后续步骤会向同一文件追加 `remote_url` 与文生图小节。
 - **State + navigation (avoid “stale UI” bugs)**:
   - If a screen uses `ChangeNotifier` / async-loaded model data, **every route that reads live state must subscribe** (e.g. wrap the page in `ListenableBuilder` / `AnimatedBuilder`, or `Provider` + `context.watch`).
   - Parent-only listeners (e.g. home wrapped in `AnimatedBuilder`) do **not** rebuild **pushed** child routes; detail/list pages need their own subscription.
@@ -119,7 +115,7 @@ Collect from user when provided; otherwise generate reasonable defaults:
   3. You **may** add product-themed props the animal holds or wears (e.g. guitar pick, color drops), but the **animal remains the primary focal subject**.
 - State the chosen animal in both the **English** icon brief and the **Chinese** prompts in `马甲包复核说明.md`.
 - Create an **English icon brief** (1–3 sentences) and embed these **image-generation rules** in both the brief and the Chinese prompts you write to `马甲包复核说明.md`:
-  - **Style**: **Cartoon-leaning** (e.g. cute **3D chibi**, soft stylized 3D, or clean vector—not photoreal wildlife). Optional small props (e.g. tribal headband, toy drum, product-relevant item in paws) are OK; keep legible at small size.
+  - **Style**: **Cute 3D chibi** (soft stylized 3D; not photoreal). Optional small props (e.g. product-relevant item in paws) are OK; keep legible at small size.
   - **Output shape**: Request **1:1 square** and **tight “full-bleed” / 满框 composition** (the **animal** + props **fill most of the frame**—e.g. ~80%+ area; **entire** animal **in frame** where possible—ears/tail/limb tips inside the square **unless** a deliberate tighter crop; **minimal** background / soft bokeh in corners only; “app store icon, no letterboxing bands”).
   - **Constraints**: no text, no logo, high contrast, legible at ~64px, edge-safe for iOS squircle (avoid mock phone frames, avoid critical detail only in the extreme corners).
 - **Update `apps/<app_name>/马甲包复核说明.md`**: add **「文生图 App Icon 提示词」** with 1–2 copy-pastable **Chinese** prompts: **动物主体**、**本包选定的** **虎/牛/兔/鼠/龙**（或本包指定的一种动物）、**卡通感、1:1、主体满框、少留白、无字无商标**; optional line on pairing with a product prop. Add one line: widescreen exports use **center square crop**, not top/bottom padding (see below).
@@ -144,8 +140,12 @@ Collect from user when provided; otherwise generate reasonable defaults:
 
 ### 4) Integrate `app_common` boot flow
 
+- Do NOT reference the repo-level shared module via `../../packages/app_common` in this flow.
+- Instead, **vendor** `app_common` into the new jacket app (template-style import) so the app is self-contained:
+  - Create `apps/<app_name>/packages/` (if missing)
+  - Copy `packages/app_common` into `apps/<app_name>/packages/app_common`
 - Add dependency in `pubspec.yaml`:
-  - `app_common: path: ../../packages/app_common`
+  - `app_common: path: packages/app_common`
 - Add required runtime deps as needed by the app’s features (e.g. `shared_preferences`).
 - Wire `main.dart` to load settings (if any), then show `BootPage`.
 - `BootPage` MUST route to local home builder (the real app Home) via the existing `BootCoordinator` + `RemoteConfigClient` pattern.
@@ -180,9 +180,9 @@ Rules:
 
 ### 7) Validation (don’t get stuck)
 
-- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认三节齐全且为中文：**马甲包功能**（含**除设置外 ≥3 个主区块**说明）、**`remote_url` / 端点定义**（含完整 endpoint 字符串、与 README **同款**的**随机字段映射**与**响应示例 JSON**）、**文生图 App Icon 提示词**（**必须为动物**、标明**虎/牛/兔/鼠/龙**中本包选用的一种或指定动物、**卡通+满框/1:1**、**横图内接方裁、勿大 letterbox**；与 step 3 一致）。
+- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认三节齐全且为中文：**马甲包功能**（含**除设置外 ≥5 个主区块**说明）、**`remote_url` / 端点定义**（含完整 endpoint 字符串、与 README **同款**的**随机字段映射**与**响应示例 JSON**）、**文生图 App Icon 提示词**（**必须为动物**、标明**虎/牛/兔/鼠/龙**中本包选用的一种或指定动物、**可爱 3D chibi**+**满框/1:1**、**横图内接方裁、勿大 letterbox**；与 step 3 一致）。
 - **App icon 文件**：`sips -g pixelWidth -g pixelHeight apps/<app_name>/assets/app_icon.png` 应为 **1024×1024**；若用横版母图，确认未用上下条带 letterbox 生成该文件。
-- **Primary blocks (non-Settings)**: After a cold launch, confirm **at least three** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
+- **Primary blocks (non-Settings)**: After a cold launch, confirm **at least five** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
 - **Booting**: Open the app once and confirm the boot screen is **not** a generic single-line `Booting` / bare centered spinner only; it should be clearly different from a template `BootPage` and aligned with the app theme.
 - Manually sanity-check **one interactive loop per main screen** (tap toggles, save, navigate away/back) so “notifyListeners but UI stuck until pop” issues are caught early.
 - Manually sanity-check Settings:
@@ -199,9 +199,9 @@ Rules:
 After completion, summarize:
 - App path: `apps/<app_name>/`
 - What product was generated (English name + one-liner)
-- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：功能含 ≥3 主区块、`remote_url` 含 endpoint+映射+与 README 一致的**随机响应示例**、文生图 Icon **动物吉祥物**+**虎牛兔鼠龙择一**或指定动物+**卡通+满框/1:1**）
-- Confirm **≥3 visible primary product blocks** (excluding Settings) are implemented and documented
+- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：功能含 ≥5 主区块、`remote_url` 含 endpoint+映射+与 README 一致的**响应示例**、文生图 Icon **动物吉祥物**+**虎牛兔鼠龙择一**或指定动物+**可爱 3D chibi**+**满框/1:1**）
+- Confirm **≥5 visible primary product blocks** (excluding Settings) are implemented and documented
 - Briefly describe the **Booting** look (layout + motion), or state that it is text-free visual-only
-- Where to change endpoint/keyset
+- Where to change endpoint
 - Confirm Info.plist includes ATT key
 
