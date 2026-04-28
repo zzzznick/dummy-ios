@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:palette_pilot/app/settings/app_settings_controller.dart';
 import 'package:palette_pilot/app/settings/app_settings_store.dart';
-import 'package:palette_pilot/boot/boot_page.dart';
+import 'package:palette_pilot/_vsbwk/_vsbwk.dart';
 
 void main() {
   testWidgets('Boot UI renders', (WidgetTester tester) async {
@@ -18,11 +18,11 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
-        home: BootPage(settings: settings, enableAutoStart: false),
+        home: Vsbwk0(a: (_) => const SizedBox.shrink(), b: false),
       ),
     );
 
-    expect(find.text('Preparing your color lab'), findsOneWidget);
-    expect(find.byType(LinearProgressIndicator), findsOneWidget);
+    expect(find.text('Preparing your workspace'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }

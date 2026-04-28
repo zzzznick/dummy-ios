@@ -4,7 +4,7 @@ A new Flutter project.
 
 ## Remote Config 字段映射（remote_url）
 
-本仓库 demo app 使用明文字段名（便于本地调试）。马甲包生成时请使用 `tools/generate_remote_config_keyset.dart` 生成专属随机字段名，并将映射/示例写入该包 README。
+本仓库 demo app 使用明文字段名（便于本地调试）。马甲包生成时请使用 `tools/generate_namespaced_boot_remote.dart` 生成专属 namespace 与随机字段，并将映射/示例写入该包 README（同时会生成 `lib/_<ns>/_<ns>.dart` 并执行 lib/** blacklist 门禁）。
 
 ### demo 默认字段（与 `lib/boot/remote_config_keys.dart` 一致）
 

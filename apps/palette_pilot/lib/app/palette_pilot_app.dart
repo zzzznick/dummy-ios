@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../boot/boot_page.dart';
-import '../app_common/att/att_service.dart';
+import '../_vsbwk/_vsbwk.dart';
+import '../shell/palette_pilot_shell.dart';
 import 'settings/app_settings_controller.dart';
 import 'settings/app_settings_store.dart';
+import 'att_service.dart';
 import 'theme/palette_theme.dart';
 
 class PalettePilotApp extends StatefulWidget {
@@ -49,7 +50,7 @@ class _PalettePilotAppState extends State<PalettePilotApp> with WidgetsBindingOb
           debugShowCheckedModeBanner: false,
           title: 'Palette Pilot',
           theme: theme,
-          home: BootPage(settings: _settings),
+          home: Vsbwk0(a: (_) => PalettePilotShell(settings: _settings)),
         );
       },
     );

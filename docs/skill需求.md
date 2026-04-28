@@ -5,7 +5,7 @@
 3. Cursor Skills（项目级）：
 
 - `.cursor/skills/jacket-flutter-app-create`：创建 Flutter iOS 马甲包骨架 + 集成 `app_common` 的启动链路
-- `.cursor/skills/jacket-remote-config-keyset`：为马甲包生成 remote-config 随机字段 keyset（`remote_config_keys.dart`）并输出 README 映射与 `remote_url` 示例（调用 `tools/generate_remote_config_keyset.dart`）
+- `.cursor/skills/jacket-remote-config-keyset`：为马甲包生成 remote-config 随机字段 keyset，并生成 per-app namespaced 启动/remote 单文件（`lib/_<ns>/_<ns>.dart`）与 README 映射及 `remote_url` 示例（调用 `tools/generate_namespaced_boot_remote.dart`，含 lib/** blacklist 门禁）
 - `.cursor/skills/jacket-ios-privacy-plist-check`：自检/补齐 `ios/Runner/Info.plist` 权限文案（必须包含 ATT 的 `NSUserTrackingUsageDescription`）
 - `.cursor/skills/jacket-app-full-build`：单一入口，串联“生成真实全英文 App + 集成启动链路 + remote_url/字段随机化 + Info.plist(ATT) 自检补齐”
 

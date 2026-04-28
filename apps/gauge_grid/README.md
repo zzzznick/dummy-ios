@@ -72,4 +72,4 @@ flutter test
 - `lib/boot/remote_config_keys.dart` → `remoteConfigKeys`
 
 Update both when you re-run:  
-`dart run tools/generate_remote_config_keyset.dart apps/gauge_grid <new_prefix> --force --endpoint <url>` (from repository root)
+`dart run tools/generate_namespaced_boot_remote.dart apps/gauge_grid <new_ns> --force --endpoint <url>` (from repository root)

@@ -11,7 +11,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 - Create a new app under `apps/`
 - Generate a **real, production-like** app experience (not just skeleton) with **≥5 visible primary product blocks** (Settings excluded) per Hard requirements
 - Integrate `app_common` boot flow with a **unique Booting** experience per app
-- Generate **per-app** `remote_url` random keyset + mapping + response example (**code is source of truth** in `lib/boot/remote_config_spec.dart`)
+- Generate **per-app** `remote_url` endpoint + random field keyset + mapping + response example (**docs are source of truth**; code is **namespaced** under `lib/_<ns>/_<ns>.dart` and MUST NOT contain semantic mapping)
 - Ensure iOS `Info.plist` is safe (must include ATT)
 
 ## Hard requirements
@@ -50,9 +50,9 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - Reuse the app’s **ColorScheme** / `ThemeData` (same seed and typography intent as the home app) so boot feels native to the product, not a generic overlay.
   - If any string is shown, it MUST stay **English** and product-appropriate; do not rely on generic `"Booting"` / `"Loading..."` as the sole differentiator.
 - **Remote**:
-  - **Source of truth (mandatory)**: `lib/boot/remote_config_spec.dart`
-    - `remoteConfigEndpoint` (endpoint / `remote_url`)
-    - `remoteConfigKeys` (**random keys**)
+  - **Namespaced code (mandatory)**: `lib/_<ns>/_<ns>.dart`
+    - Per-app namespace `<ns>` MUST be **5 lowercase letters** (reuse the remote key prefix).
+    - The file MUST NOT contain semantic-field mapping or forbidden tokens (see step 5 blacklist gate).
   - README must include endpoint + **field mapping** + `remote_url` response example (**random keys**; first item is used).
   - The Chinese review doc (`马甲包复核说明.md`) MUST also include the same endpoint + mapping + response example as `README.md` (see “中文复核文档” below).
 - **iOS privacy**: `apps/<app>/ios/Runner/Info.plist` MUST include `NSUserTrackingUsageDescription` (ATT).
@@ -154,20 +154,20 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - Keep boot duration realistic: the coordinator may finish quickly; avoid UI that *requires* a long load to look correct.
   - If helpful for audits, add a one-line note in `README.md` (English) under product description: e.g. “Boot: gradient + top-aligned progress” (optional, not a substitute for actual variance in code).
 
-### 5) Generate per-app remote_url endpoint + random field keyset + README snippet
+### 5) Generate per-app namespaced boot+remote file + README snippet (with blacklist gate)
 
 Use the generator script from repo root:
 
 ```bash
-dart run tools/generate_remote_config_keyset.dart apps/<app_name> <prefix> --force --endpoint <remote_url>
+dart run tools/generate_namespaced_boot_remote.dart apps/<app_name> <ns> --force --endpoint <remote_url>
 ```
 
 Rules:
 - If user didn’t provide `<remote_url>`, generate a unique placeholder like:
   - `https://example.com/remote-config/<app_name>`
-- Choose `<prefix>` randomly (5 letters) unless user supplied one.
-- Generator writes **source-of-truth** code: `apps/<app_name>/lib/boot/remote_config_spec.dart`.
-- Ensure `BootPage` reads endpoint and keys from `remote_config_spec.dart`.
+- Choose `<ns>` randomly (5 lowercase letters) unless user supplied one. Reuse the same `<ns>` as the remote JSON random-key prefix.
+- Generator writes **namespaced** code: `apps/<app_name>/lib/_<ns>/_<ns>.dart` and enforces a **lib/** blacklist gate (must pass).
+- Ensure app startup uses the generated entry widget/builder from `lib/_<ns>/_<ns>.dart` (instead of `BootPage → BootCoordinator → RemoteConfigClient` naming).
 - Append generator output into `apps/<app_name>/README.md` under a “Remote config (`remote_url`)" section.
 - **Update `apps/<app_name>/马甲包复核说明.md`**：在 **「`remote_url` / 端点定义」** 小节写中文说明，并**粘贴**与 README 相同的**两段 fenced JSON**（随机字段映射 + `remote_url` 响应示例，首项对象）；该内容与生成器在终端打印的 **README snippet 一致，可直接从 step 5 的 stdout 复制**（须含完整 endpoint 字符串；不得依赖“仅见 README”省略示例）。
 

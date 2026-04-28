@@ -1,6 +1,6 @@
 ---
 name: jacket-remote-config-keyset
-description: Generates per-app remote_url endpoint + remote-config random field keyset, and prints a README snippet (endpoint + mapping + response example) using tools/generate_remote_config_keyset.dart. Use when the user asks to randomize/mapping remote fields, set different remote_url per jacket app, mockapi remote 字段映射, or to output the mapping in the generated jacket app README.
+description: Generates per-app remote_url endpoint + random field keyset, writes namespaced boot+remote glue code under lib/_<ns>/_<ns>.dart, prints a README snippet (endpoint + mapping + response example), and enforces a lib/** blacklist gate using tools/generate_namespaced_boot_remote.dart. Use when the user asks to randomize/mapping remote fields, set different remote_url per jacket app, mockapi remote 字段映射, or to output the mapping in the generated jacket app README.
 ---
 
 # Remote config（remote_url）端点 + 字段随机化（keyset）+ README 输出
@@ -15,7 +15,7 @@ description: Generates per-app remote_url endpoint + remote-config random field 
 ## 前置条件（仓库内已提供）
 
 - `app_common` 已支持通过 `RemoteConfigKeys` 注入解析 remote-config
-- 生成工具：`tools/generate_remote_config_keyset.dart`
+- 生成工具：`tools/generate_namespaced_boot_remote.dart`
 
 ## 输入
 
@@ -26,32 +26,22 @@ description: Generates per-app remote_url endpoint + remote-config random field 
 
 ## 工作流程
 
-### 1) 生成 `remote_url` endpoint + `remote_config_keys.dart`
+### 1) 生成 `remote_url` endpoint + namespaced 单文件（含 blacklist 门禁）
 
 在仓库根目录执行：
 
 ```bash
-dart run tools/generate_remote_config_keyset.dart apps/<app_name> [prefix] --force --endpoint <remote_url>
+dart run tools/generate_namespaced_boot_remote.dart apps/<app_name> [ns] --force --endpoint <remote_url>
 ```
 
 说明：
-- 输出文件路径固定：`apps/<app_name>/lib/boot/remote_config_keys.dart`
-- 文件内导出常量：`remoteConfigKeys`
-- 输出 endpoint 文件：`apps/<app_name>/lib/boot/remote_config_endpoint.dart`
-  - 文件内导出常量：`remoteConfigEndpoint`
+- 输出文件路径固定：`apps/<app_name>/lib/_<ns>/_<ns>.dart`（单文件聚合）
+- 生成器会在结束时对 `apps/<app_name>/lib/**` 执行 blacklist 扫描，命中即失败并报告文件+token
 - 默认会拒绝覆盖已存在文件；需要替换时加 `--force`
 
-### 2)（可选）生成兼容模式 fallback keys
+### 2)（兼容策略）
 
-仅在需要“新 key 优先、缺失则回退旧明文字段”的迁移窗口时使用：
-
-```bash
-dart run tools/generate_remote_config_keyset.dart apps/<app_name> [prefix] --force --compat
-```
-
-说明：
-- 额外生成 `remoteConfigFallbackKeys`（明文字段）
-- 客户端接入方式：构造 `RemoteConfigClient(endpoint: ..., keys: remoteConfigKeys, fallbackKeys: remoteConfigFallbackKeys)`
+本次 namespaced 方案的目标是源码去同构/去语义化；如需兼容旧字段（fallback）请在实现阶段另开 change 设计迁移窗口策略，避免把语义字段名引回 `lib/**`。
 
 ### 3) 更新/追加 README 映射说明
 
@@ -64,8 +54,8 @@ dart run tools/generate_remote_config_keyset.dart apps/<app_name> [prefix] --for
 
 ## 验证清单
 
-- 检查 `apps/<app_name>/lib/boot/boot_page.dart`（或等价位置）是否已经注入 `keys: remoteConfigKeys`
-- 如果启用 compat：确认注入了 `fallbackKeys: remoteConfigFallbackKeys`
+- 检查 app 启动入口是否已使用 `apps/<app_name>/lib/_<ns>/_<ns>.dart` 的入口 widget/builder
+- 确认 blacklist 扫描通过（生成器退出码为 0）
 - 运行：`cd apps/<app_name> && flutter test`
 
 ## 常见坑

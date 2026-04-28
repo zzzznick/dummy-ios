@@ -55,7 +55,7 @@ description: Creates a production-like Flutter iOS jacket app under apps/ with a
 - 在新 app 中建立 `lib/boot/boot_page.dart`
   - 使用 `BootCoordinator(remoteConfigClient: RemoteConfigClient(...))`
   - `localHomeBuilder` 指向“真实应用主页”（见第 4 步生成的 home）
-- 在新 app 中建立 `lib/boot/remote_config_keys.dart`
+- 在新 app 中建立 namespaced 入口文件 `lib/_<ns>/_<ns>.dart`（由生成器写入）
   - 先使用 demo 明文字段（便于开发期调试）；马甲包生成时会由专门 skill 替换为随机 keyset
 
 ### 4) 生成“真实应用”本体（LLM 决定主题与实现）

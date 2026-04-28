@@ -5,7 +5,6 @@ class AttService {
 
   Future<void> requestIfNeeded() async {
     if (_requestedThisSession) return;
-
     try {
       final status = await AppTrackingTransparency.trackingAuthorizationStatus;
       if (status == TrackingStatus.notDetermined) {
@@ -13,7 +12,7 @@ class AttService {
         await AppTrackingTransparency.requestTrackingAuthorization();
       }
     } catch (_) {
-      // Best-effort; do not block app startup.
+      // Best-effort; do not block startup.
     }
   }
 }

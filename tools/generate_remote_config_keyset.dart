@@ -1,6 +1,17 @@
 import 'dart:io';
 import 'dart:math';
 
+/// DEPRECATED
+///
+/// This legacy generator produces `lib/boot/remote_config_spec.dart` and embeds
+/// semantic mapping identifiers in code (e.g. url/platform/eventType), which is
+/// no longer allowed for jacket apps that may be batch-reviewed.
+///
+/// Use the namespaced generator instead:
+///   dart run tools/generate_namespaced_boot_remote.dart <app_dir> [ns] --force --endpoint <url>
+///
+/// This script is intentionally disabled to prevent accidental use.
+
 /// Generates per-app `remote_config_spec.dart` and a README snippet.
 ///
 /// Usage:
@@ -13,6 +24,14 @@ import 'dart:math';
 /// - Writes: <app_dir>/lib/boot/remote_config_spec.dart
 /// - Prints: a markdown snippet (mapping + remote_url example)
 void main(List<String> args) {
+  stderr.writeln(
+    '[DEPRECATED] tools/generate_remote_config_keyset.dart is disabled.\n'
+    'Use:\n'
+    '  dart run tools/generate_namespaced_boot_remote.dart <app_dir> [ns] --force --endpoint <url>\n',
+  );
+  exitCode = 78;
+  return;
+
   if (args.isEmpty) {
     stderr.writeln(
       'Usage: dart run tools/generate_remote_config_keyset.dart <app_dir> [prefix] [--force] [--endpoint <url>]',

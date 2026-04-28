@@ -14,7 +14,7 @@ Settings are stored locally and persist across restarts.
 
 ## Boot
 
-Uses `app_common` boot flow (`BootPage → BootCoordinator → RemoteConfigClient`) with a themed orbit animation and a short minimum delay to avoid a one-frame flash.
+Boot entry is generated per-app under `lib/_vsbwk/_vsbwk.dart` and is intentionally namespaced to avoid cross-app code fingerprints during review.
 
 ## App icon
 
