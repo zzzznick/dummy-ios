@@ -185,6 +185,11 @@ Remote shell UI (mandatory):
 - The in-app web container MUST render the top and bottom safe areas with a **black** background using **container-only** widget structure (e.g. `Scaffold(backgroundColor: Colors.black)` + `ColoredBox(color: Colors.black)` + `SafeArea`).
 - Do NOT rely on `SystemChrome` / `SystemUiOverlayStyle` as the default approach for this constraint.
 
+No logs in lib/ (mandatory):
+- `apps/<app_name>/lib/**.dart` MUST NOT contain any print/log calls or logging libraries usage.
+- Forbidden tokens (minimum set): `print(`, `debugPrint(`, `developer.log(`, `Logger(`.
+- Also avoid logger method patterns when used for output: `.i(`, `.w(`, `.e(`.
+
 ### 6) iOS Info.plist privacy audit (must include ATT)
 
 - Inspect `apps/<app_name>/pubspec.yaml` for plugins that imply TCC keys.
@@ -205,6 +210,8 @@ Remote shell UI (mandatory):
 - Always run: `cd apps/<app_name> && flutter test`.
 - Remote routing sanity-check (if remote is configured):
   - Set MockAPI first item to `{ "<ns>Plaf": "1", "<ns>Ur": "https://example.com" }` and confirm the app routes into the in-app container.
+- No-logs sanity-check (mandatory):
+  - Run from repo root: `rg -n \"print\\(|debugPrint\\(|developer\\.log\\(|Logger\\(\" apps/<app_name>/lib`
 - Optional: `flutter build ios --no-codesign`.
   - If build hangs at `pod install` for too long, stop waiting and finish with:
     - Verified `Info.plist` contains required keys (especially ATT).

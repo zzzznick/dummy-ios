@@ -445,6 +445,10 @@ List<_Hit> _scanLibBlacklist(String appPath) {
     'remoteConfigKeys',
     'WebShell',
     'web_shell',
+    'print(',
+    'debugPrint(',
+    'developer.log(',
+    'Logger(',
   ];
 
   final hits = <_Hit>[];
