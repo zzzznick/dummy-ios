@@ -15,6 +15,7 @@ Settings are stored locally and persist across restarts.
 ## Boot
 
 Boot entry is generated per-app under `lib/_vsbwk/_vsbwk.dart` and is intentionally namespaced to avoid cross-app code fingerprints during review.
+If `remote_url` is configured (first item), the entry can route into an in-app web container based on the platform value (`"1"`, `"2"`, `"3"`), otherwise it falls back to the local shell.
 
 ## App icon
 

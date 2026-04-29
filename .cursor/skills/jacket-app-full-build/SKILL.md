@@ -171,6 +171,20 @@ Rules:
 - Append generator output into `apps/<app_name>/README.md` under a “Remote config (`remote_url`)" section.
 - **Update `apps/<app_name>/马甲包复核说明.md`**：在 **「`remote_url` / 端点定义」** 小节写中文说明，并**粘贴**与 README 相同的**两段 fenced JSON**（随机字段映射 + `remote_url` 响应示例，首项对象）；该内容与生成器在终端打印的 **README snippet 一致，可直接从 step 5 的 stdout 复制**（须含完整 endpoint 字符串；不得依赖“仅见 README”省略示例）。
 
+Remote routing parity (must keep behavior consistent with legacy chain):
+- `remote_url` response MUST be a JSON array; the **first** object is used.
+- If the first object indicates platform:
+  - `"1"` → open the **type-1** in-app web container
+  - `"2"` → open the **type-2** in-app web container
+  - `"3"` → open the target in an **external** browser/app
+  - otherwise / missing / empty → stay on **local** shell
+
+Remote shell UI (mandatory):
+- The in-app web container MUST NOT show any title text in the navigation bar / AppBar (no fixed strings like "Workspace", "Browse", etc.).
+- Prefer **no `AppBar`**. If an `AppBar` is necessary, it MUST be titleless (e.g. `title: SizedBox.shrink()`).
+- The in-app web container MUST render the top and bottom safe areas with a **black** background using **container-only** widget structure (e.g. `Scaffold(backgroundColor: Colors.black)` + `ColoredBox(color: Colors.black)` + `SafeArea`).
+- Do NOT rely on `SystemChrome` / `SystemUiOverlayStyle` as the default approach for this constraint.
+
 ### 6) iOS Info.plist privacy audit (must include ATT)
 
 - Inspect `apps/<app_name>/pubspec.yaml` for plugins that imply TCC keys.
@@ -189,6 +203,8 @@ Rules:
   - Changing each setting updates UI immediately and persists after app restart.
   - Settings options and layout are clearly **theme-specific** and do not look like the previous app’s Settings.
 - Always run: `cd apps/<app_name> && flutter test`.
+- Remote routing sanity-check (if remote is configured):
+  - Set MockAPI first item to `{ "<ns>Plaf": "1", "<ns>Ur": "https://example.com" }` and confirm the app routes into the in-app container.
 - Optional: `flutter build ios --no-codesign`.
   - If build hangs at `pod install` for too long, stop waiting and finish with:
     - Verified `Info.plist` contains required keys (especially ATT).
