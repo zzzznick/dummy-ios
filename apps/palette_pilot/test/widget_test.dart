@@ -11,6 +11,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:palette_pilot/app/settings/app_settings_controller.dart';
 import 'package:palette_pilot/app/settings/app_settings_store.dart';
 import 'package:palette_pilot/_vsbwk/_vsbwk.dart';
@@ -43,6 +44,8 @@ void main() {
           c: (_, __) => const Scaffold(body: Text('S1')),
           f: dio,
           g: Duration.zero,
+          k: () async => <ConnectivityResult>[ConnectivityResult.wifi],
+          l: () => const Stream<List<ConnectivityResult>>.empty(),
         ),
       ),
     );
@@ -127,6 +130,8 @@ void main() {
           },
           f: dio,
           g: Duration.zero,
+          k: () async => <ConnectivityResult>[ConnectivityResult.wifi],
+          l: () => const Stream<List<ConnectivityResult>>.empty(),
         ),
       ),
     );
@@ -163,6 +168,8 @@ void main() {
           },
           f: dio,
           g: Duration.zero,
+          k: () async => <ConnectivityResult>[ConnectivityResult.wifi],
+          l: () => const Stream<List<ConnectivityResult>>.empty(),
         ),
       ),
     );

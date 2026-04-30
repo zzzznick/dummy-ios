@@ -181,6 +181,12 @@ Remote routing parity (must keep behavior consistent with legacy chain):
   - `"2"` → open the **type-2** in-app web container
   - `"3"` → open the target in an **external** browser/app
   - otherwise / missing / empty → stay on **local** shell
+- Startup network switching tolerance (mandatory):
+  - The generated entry MUST implement **Rule A** network behavior:
+    - On cold start, if there is **no network** (`none`), it MUST route to the local shell immediately.
+    - After routing to local, it MUST listen for connectivity changes and, on the **first** transition from `none` → available (wifi/mobile/ethernet), it MUST request `remote_url` and apply the platform routing decision (type-1/type-2/external/local).
+    - The local-shell listener MUST be one-shot (avoid repeated remote opens on flapping networks).
+  - This MUST be implemented without logs and without leaking subscriptions (cancel on dispose).
 
 Attribution bridge (dual JS protocols):
 - When the in-app web container is used, the app MUST accept web→native event messages and forward them to attribution SDKs (best-effort, no crashes, no logs).

