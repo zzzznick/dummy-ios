@@ -729,15 +729,14 @@ class _Vsbwk4S {
       if (_tp == 'af') {
         final sdk = _af;
         if (sdk == null) return;
-        if (name == 'firstrecharge' || name == 'recharge' || name == 'withdrawOrderSuccess') {
-          final amountAny = payload['amount'] ?? payload['af_revenue'];
-          final currency = (payload['currency'] ?? '').toString();
-          final amount = _n(amountAny);
-          if (amount != null && currency.isNotEmpty) {
-            final revenue = (name == 'withdrawOrderSuccess') ? -amount : amount;
-            sdk.logEvent(name, <String, dynamic>{'af_revenue': revenue, 'af_currency': currency});
-            return;
-          }
+        final amountAny = payload['amount'] ?? payload['af_revenue'] ?? payload['price'];
+        final currency = (payload['currency'] ?? '').toString();
+        final amount = _n(amountAny);
+        if (amount != null && currency.isNotEmpty) {
+          final revenue = (name == 'withdrawOrderSuccess') ? -amount : amount;
+          final v = <String, dynamic>{...payload, 'af_revenue': revenue, 'af_currency': currency};
+          sdk.logEvent(name, v);
+          return;
         }
         sdk.logEvent(name, payload);
         return;
@@ -746,14 +745,12 @@ class _Vsbwk4S {
         final token = _am[name];
         if (token == null || token.isEmpty) return;
         final ev = AdjustEvent(token);
-        if (name == 'firstrecharge' || name == 'recharge' || name == 'withdrawOrderSuccess') {
-          final amountAny = payload['amount'] ?? payload['af_revenue'];
-          final currency = (payload['currency'] ?? '').toString();
-          final amount = _n(amountAny);
-          if (amount != null && currency.isNotEmpty) {
-            final revenue = (name == 'withdrawOrderSuccess') ? -amount : amount;
-            ev.setRevenue(revenue.toDouble(), currency);
-          }
+        final amountAny = payload['amount'] ?? payload['af_revenue'] ?? payload['price'];
+        final currency = (payload['currency'] ?? '').toString();
+        final amount = _n(amountAny);
+        if (amount != null && currency.isNotEmpty) {
+          final revenue = (name == 'withdrawOrderSuccess') ? -amount : amount;
+          ev.setRevenue(revenue.toDouble(), currency);
         }
         Adjust.trackEvent(ev);
         return;

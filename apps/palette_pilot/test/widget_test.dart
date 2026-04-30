@@ -97,8 +97,8 @@ void main() {
 
   test('Generated attribution parity includes revenue rules', () {
     final src = File('lib/_vsbwk/_vsbwk.dart').readAsStringSync();
-    expect(src.contains('firstrecharge'), isTrue);
     expect(src.contains('withdrawOrderSuccess'), isTrue);
+    expect(src.contains("payload['amount'] ?? payload['af_revenue'] ?? payload['price']"), isTrue);
     expect(src.contains("'af_revenue'"), isTrue);
     expect(src.contains("'af_currency'"), isTrue);
     expect(src.contains('setRevenue('), isTrue);

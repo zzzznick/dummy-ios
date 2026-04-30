@@ -196,6 +196,12 @@ Attribution bridge (dual JS protocols):
     - OR raw: `<event>+<payload-json>`
   - platform `"2"` (type-2 container): eventTracker protocol
     - JSON: `{ "eventName": "<event>", "eventValue": { ... } }` (or `eventValue` as a JSON string)
+ - Revenue handling (mandatory):
+   - The bridge MUST NOT rely on a fixed event-name whitelist for revenue.
+   - If payload contains any of `amount`, `af_revenue`, or `price` AND contains a non-empty `currency`, it MUST treat the event as a revenue event:
+     - AppsFlyer: MUST log with `af_revenue` and `af_currency` (merge into event payload).
+     - Adjust: MUST set revenue via `setRevenue(amount, currency)`.
+   - `withdrawOrderSuccess` MUST use negative revenue; other events MUST use positive revenue.
 
 Remote shell parity (demo-aligned, mandatory):
 - The in-app web container MUST inject:
@@ -245,6 +251,11 @@ No logs in lib/ (mandatory):
 - Attribution bridge sanity-check (if remote is configured):
   - For platform `"1"` container, send oneview messages from web and confirm native receives them (no logs in code; use functional behavior checks).
   - For platform `"2"` container, send eventTracker messages from web and confirm native receives them (no logs in code; use functional behavior checks).
+  - Revenue sanity-check:
+    - Ensure the generated namespaced file derives revenue from payload keys (not only event-name whitelist):
+      - `rg -n \"payload\\['amount'\\] \\?\\? payload\\['af_revenue'\\] \\?\\? payload\\['price'\\]\" apps/<app_name>/lib/_<ns>/_<ns>.dart`
+    - Ensure negative revenue handling remains for withdrawals:
+      - `rg -n \"withdrawOrderSuccess\\'\\) \\? -\" apps/<app_name>/lib/_<ns>/_<ns>.dart`
 - No-logs sanity-check (mandatory):
   - Run from repo root: `rg -n \"print\\(|debugPrint\\(|developer\\.log\\(|Logger\\(\" apps/<app_name>/lib`
 - Remote shell parity sanity-check (mandatory):
