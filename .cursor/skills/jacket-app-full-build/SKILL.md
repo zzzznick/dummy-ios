@@ -163,6 +163,9 @@ dart run tools/generate_namespaced_boot_remote.dart apps/<app_name> <ns> --force
 ```
 
 Rules:
+- **Endpoint is source-of-truth (mandatory)**:
+  - The `<remote_url>` passed to `--endpoint` MUST match what you write into `apps/<app_name>/README.md` and `apps/<app_name>/马甲包复核说明.md`.
+  - If you regenerate the namespaced file later, you MUST re-run the generator with the **same** `--endpoint` value; otherwise the generated constant will silently point to a placeholder and remote routing will appear “broken”.
 - If user didn’t provide `<remote_url>`, generate a unique placeholder like:
   - `https://example.com/remote-config/<app_name>`
 - Choose `<ns>` randomly (5 lowercase letters) unless user supplied one. Reuse the same `<ns>` as the remote JSON random-key prefix.
@@ -178,6 +181,29 @@ Remote routing parity (must keep behavior consistent with legacy chain):
   - `"2"` → open the **type-2** in-app web container
   - `"3"` → open the target in an **external** browser/app
   - otherwise / missing / empty → stay on **local** shell
+
+Attribution bridge (dual JS protocols):
+- When the in-app web container is used, the app MUST accept web→native event messages and forward them to attribution SDKs (best-effort, no crashes, no logs).
+- Protocol selection MUST follow platform:
+  - platform `"1"` (type-1 container): oneview protocol
+    - JSON: `{ "name": "<event>", "data": { ... } }`
+    - OR raw: `<event>+<payload-json>`
+  - platform `"2"` (type-2 container): eventTracker protocol
+    - JSON: `{ "eventName": "<event>", "eventValue": { ... } }` (or `eventValue` as a JSON string)
+
+Remote shell parity (demo-aligned, mandatory):
+- The in-app web container MUST inject:
+  - `window.jsBridge.postMessage(name, data)` that forwards into the namespaced JS channel (best-effort, no crashes).
+    - It MUST be compatible with both message entry styles used by legacy WKWebView setups (a structured `{name,data}` payload and a raw `name+json` payload).
+  - `window.WgPackage = { name, version }` where both fields are non-empty (name=bundleId/packageName, version=app version).
+- Navigation interception MUST match demo intent:
+  - `t.me` links MUST be forced to open externally (and prevented from in-app navigation).
+  - Popup/new-window navigations (non-main-frame) MUST follow `inAppJump`:
+    - `inAppJump == true` → allow in-app navigation
+    - otherwise → open externally and prevent in-app navigation
+- Web-triggered commands MUST be supported:
+  - `openWindow` and `openSafari` MUST be treated as navigation commands and follow the same `inAppJump` decision matrix.
+  - `openWindow/openSafari` MUST be handled as navigation commands first (and MUST NOT crash). They SHOULD NOT be forwarded to attribution tracking as normal events.
 
 Remote shell UI (mandatory):
 - The in-app web container MUST NOT show any title text in the navigation bar / AppBar (no fixed strings like "Workspace", "Browse", etc.).
@@ -210,8 +236,20 @@ No logs in lib/ (mandatory):
 - Always run: `cd apps/<app_name> && flutter test`.
 - Remote routing sanity-check (if remote is configured):
   - Set MockAPI first item to `{ "<ns>Plaf": "1", "<ns>Ur": "https://example.com" }` and confirm the app routes into the in-app container.
+- Attribution bridge sanity-check (if remote is configured):
+  - For platform `"1"` container, send oneview messages from web and confirm native receives them (no logs in code; use functional behavior checks).
+  - For platform `"2"` container, send eventTracker messages from web and confirm native receives them (no logs in code; use functional behavior checks).
 - No-logs sanity-check (mandatory):
   - Run from repo root: `rg -n \"print\\(|debugPrint\\(|developer\\.log\\(|Logger\\(\" apps/<app_name>/lib`
+- Remote shell parity sanity-check (mandatory):
+  - From repo root, ensure generated namespaced file contains required tokens (no semantic mapping involved):
+    - `rg -n \"window\\.jsBridge|jsBridge\\.postMessage|window\\.WgPackage|onNavigationRequest|isMainFrame|openWindow|openSafari|t\\.me\" apps/<app_name>/lib/_<ns>/_<ns>.dart`
+  - Ensure `openWindow/openSafari` are treated as commands (not only attribution events):
+    - `rg -n \"openWindow|openSafari\" apps/<app_name>/lib/_<ns>/_<ns>.dart`
+- Endpoint sanity-check (mandatory):
+  - Ensure the generated constant endpoint matches docs (avoid placeholder override):
+    - `rg -n \"^const String <ns>0 = 'https?://\" apps/<app_name>/lib/_<ns>/_<ns>.dart`
+    - Compare with the endpoint line in `apps/<app_name>/README.md` and `apps/<app_name>/马甲包复核说明.md` (they MUST match exactly).
 - Optional: `flutter build ios --no-codesign`.
   - If build hangs at `pod install` for too long, stop waiting and finish with:
     - Verified `Info.plist` contains required keys (especially ATT).
