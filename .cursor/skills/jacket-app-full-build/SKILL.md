@@ -75,14 +75,19 @@ Use this skill when the user wants **one command / one skill** to finish the ent
     6. **Linocut / limited-palette stamp** · 版画刻痕 + 限量色  
     **不推荐**：超长毛写实摄影主体、细线密集仅在角标才看得清的纹理。
 - **中文复核文档（本流程强制，与 English README 并列）**：
-  - 在 `apps/<app_name>/` 下**只使用一个**固定文件：`马甲包复核说明.md`（全中文，便于人工复核）。
-  - 该文件必须**统一收录**以下三块内容（可分段，不得拆成多个文档）：
+  - 在 `apps/<app_name>/` 下**只使用一个**固定文件：`马甲包复核说明.md`。**主体复核文字使用中文**；其中 **第四块「App Store 提交用英文文案」必须整段英文**（仅此块英文，便于直接粘贴 App Store Connect），不得夹中文释义污染可粘贴段落。
+  - 该文件必须**统一收录**以下**四**块内容（可分段编号，不得拆成多个文档）：
     1. **马甲包功能**：用中文写清产品定位、核心实体、主要页面与交互、与 boot/remote 的衔接方式（读哪些配置、不依赖后端的点）；并**明确列出除设置外至少五个可见主区块**（名称 + 进入方式，与本技能「≥5 visible primary blocks」一致，便于复核）。
    2. **`remote_url` / 端点定义**：用中文写清本包 `remoteConfigEndpoint` 的完整 URL、随机字段 keyset 的用途；并**必须收录与 `README.md` 中 Remote config 节一致的两段技术内容**（仅说明文字可中文，JSON 内键名保持随机串英文）：
       - **字段映射**：与 README 同款的 `### Mapping (random key → semantic field)` 代码块（随机 key → 语义字段）。
       - **响应示例**：与 README 同款的 `### \`remote_url\` response example (first item is used)` 代码块（JSON 数组，首对象含本包随机键名前缀 + 占位值；用于离线核对远端配置）。
       - **须重复写出完整 endpoint 一行 URL**；不得仅写「见 README」而省略上述两段 JSON 示例（复核文件应可**单独打开**即完成 remote 联调参照）。
     3. **文生图 App Icon 文案**：**必须**写 **(a)** 本包吉祥物为 **虎/牛/兔/鼠/龙** 中之哪一项（硬规范五项择一）、**(b)** 本包选用的 **画风轮盘** 条目（编号或英文名 + 简短中文）；并写 **满框/1:1 方图**、无字无商标、小尺寸可辨；可与产品道具组合，但**动物为主**。注明**横图**时 **内接方裁、勿大 letterbox**；须与 README 英文 icon brief 一致。
+    4. **App Store 提交用英文文案（必选，整块英文）**：为便于 App Store Connect 提交，单列一小节（建议标题：`## App Store listing (English—copy-ready)`），**本节内不出现中文** （节前可用一行中文标注用途，如「以下供 App Store Connect 粘贴」）；须包含可复制粘贴的占位已填好的以下内容（英文撰写，贴合本包真实功能，禁用 `remote_url` / MockAPI / 未实现能力）：
+      - **Promotional Text**：对应 ASC 字段 *Promotional Text*；**至多 170 字符**（含空格与标点），可换行但以提交框内连续文本形式给出。
+      - **Description**：对应 *Description*；**至多约 4000 字符**，分段落说明产品价值与主要特性（与 app 内真实页面对齐）。
+      - **Keywords**：对应 *Keywords*；**至多 100 字符**，逗号分隔英文关键词词条，无多余空格为佳，禁用竞争对手名称与无关词堆砌。
+      - **Copyright**：对应 *Copyright*；一行版权声明，形如 `© 2026 Developer or Company Name`（若未知主体可写占位 `© 2026 Rights Holder`，并在中文说明中备注上线前替换为真实权利人）。
 
 ## Inputs
 
@@ -110,7 +115,7 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - Material 3 theme with consistent color scheme.
   - Empty states, form validation, dialogs/snackbars.
 - Implement the feature set with persistence, including a **main shell** that satisfies **≥5 visible non-Settings primary blocks** (e.g. `NavigationBar` with five destinations, `TabBar`, or a home with five obvious sections each linking to a feature screen—see Hard requirements).
-- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**五个**可见主区块（名称 + 如何进入，如底栏五格 / 首屏五区等），后续步骤会向同一文件追加 `remote_url` 与文生图小节。
+- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**五个**可见主区块（名称 + 如何进入，如底栏五格 / 首屏五区等），后续步骤会向同一文件追加 **`remote_url`、文生图 App Icon**，并在收尾追加 **整块英文** 的 **App Store Promotional Text / Description / Keywords / Copyright**（见 Hard requirements 第四块与 §7）。
 - **State + navigation (avoid “stale UI” bugs)**:
   - If a screen uses `ChangeNotifier` / async-loaded model data, **every route that reads live state must subscribe** (e.g. wrap the page in `ListenableBuilder` / `AnimatedBuilder`, or `Provider` + `context.watch`).
   - Parent-only listeners (e.g. home wrapped in `AnimatedBuilder`) do **not** rebuild **pushed** child routes; detail/list pages need their own subscription.
@@ -187,6 +192,7 @@ Rules:
 - Ensure app startup uses the generated entry widget/builder from `lib/_<ns>/_<ns>.dart` (instead of `BootPage → BootCoordinator → RemoteConfigClient` naming).
 - Append generator output into `apps/<app_name>/README.md` under a “Remote config (`remote_url`)" section.
 - **Update `apps/<app_name>/马甲包复核说明.md`**：在 **「`remote_url` / 端点定义」** 小节写中文说明，并**粘贴**与 README 相同的**两段 fenced JSON**（随机字段映射 + `remote_url` 响应示例，首项对象）；该内容与生成器在终端打印的 **README snippet 一致，可直接从 step 5 的 stdout 复制**（须含完整 endpoint 字符串；不得依赖“仅见 README”省略示例）。
+- **同一文件须在交付前补齐**第四节 **English App Store listing**（见 Hard requirements 第 4 块）：若在 step 3 之后才最终确定产品名或卖点，可于此时一次性写入；**本节英文须与上架 app 一致**，不得虚假宣传。
 
 Remote routing parity (must keep behavior consistent with legacy chain):
 - `remote_url` response MUST be a JSON array; the **first** object is used.
@@ -251,7 +257,7 @@ No logs in lib/ (mandatory):
 
 ### 7) Validation (don’t get stuck)
 
-- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认三节齐全且为中文：**马甲包功能**（含**除设置外 ≥5 个主区块**说明）、**`remote_url` / 端点定义**（含完整 endpoint 字符串、与 README **同款**的**随机字段映射**与**响应示例 JSON**）、**文生图 App Icon 提示词**（**吉祥物须写明为虎/牛/兔/鼠/龙五项硬规范中之哪一项** + **画风轮盘预设** + **满框/1:1** + **横图内接方裁、勿大 letterbox**；与 README / step 3 一致）。
+- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认 **四** 节齐备：**马甲包功能**（中文；含 **≥5** 非设置主区块）、**`remote_url` / 端点定义**（中文叙述 + endpoint 一行 + 与 README **同款** Mapping / 示例 JSON）、**文生图 App Icon 提示词**（中文；五项吉祥物择一 + 画风轮盘 + 裁剪说明）、以及 **App Store listing（整块英文可复制）**：含四项字段 **Promotional Text**（≤170 字符）、**Description**（≤4000）、**Keywords**（≤100）、**Copyright**（一行）；英文段内不得夹杂中文正文（节首允许单独一行中文用途说明）。
 - **App icon 文件**：`sips -g pixelWidth -g pixelHeight apps/<app_name>/assets/app_icon.png` 应为 **1024×1024**；若用横版母图，确认未用上下条带 letterbox 生成该文件。
 - **Primary blocks (non-Settings)**: After a cold launch, confirm **at least five** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
 - **Booting**: Open the app once and confirm the boot screen is **not** a generic single-line `Booting` / bare centered spinner only; it should be clearly different from a template `BootPage` and aligned with the app theme.
@@ -291,7 +297,7 @@ No logs in lib/ (mandatory):
 After completion, summarize:
 - App path: `apps/<app_name>/`
 - What product was generated (English name + one-liner)
-- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：功能含 ≥5 主区块、`remote_url` 含 endpoint+映射+与 README 一致的**响应示例**、文生图 Icon **动物吉祥物（硬规范：虎/牛/兔/鼠/龙仅择一）**+**画风轮盘预设**+**满框/1:1**）
+- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：中文三节 + **English App Store** 整块：**Promotional Text / Description / Keywords / Copyright**；以及功能 ≥5 主区块、`remote_url` 两段 JSON、文生图 **虎牛兔鼠龙择一** + 画风轮盘 + **满框/1:1**）
 - Confirm **≥5 visible primary product blocks** (excluding Settings) are implemented and documented
 - Briefly describe the **Booting** look (layout + motion), or state that it is text-free visual-only
 - Where to change endpoint
