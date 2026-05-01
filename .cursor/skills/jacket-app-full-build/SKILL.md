@@ -1,6 +1,6 @@
 ---
 name: jacket-app-full-build
-description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least five visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url endpoint (direct string edit; no random key mapping), Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), and app icon rules (1:1/满框, mandatory animal mascot from exactly 虎/牛/兔/鼠/龙; per-app diversified art style via style wheel—not the same preset every build). Use for one-shot jacket app build.
+description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least five visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url endpoint + namespaced keys, Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), app icon rules, and mandatory manual verification that every shipped feature path runs without runtime errors before handoff. Use for one-shot jacket app build.
 ---
 
 # One-shot Flutter iOS 马甲包生成（全流程）
@@ -42,6 +42,16 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - The Settings screen layout MUST NOT be a copy of prior generated apps (avoid the same “Appearance seed color chips + Reset all data + About” structure).
   - Use **different widgets/structure** when possible (e.g. segmented control, sliders, reorderable preferences, preview cards, import/export, default behaviors) and tie them to persisted settings.
 - **Persistence**: Use light persistence (`shared_preferences` or JSON file). Must persist both user data and settings.
+- **Feature verification (mandatory — 全功能可跑通)**:
+  - Delivery is **not complete** until **every user-visible product capability** shipped in this app has been **verified working** end-to-end: **no uncaught exceptions**, no red Flutter error screen, and no broken primary action (button/save/dialog/navigation) on the happy path.
+  - **Minimum scope (must all pass)**:
+    - **Cold start → Boot gate → local shell** (or remote container if you intentionally test that branch).
+    - **Each of the ≥5 primary blocks** (excluding Settings): open, perform **one real interaction loop** appropriate to that screen (e.g. toggle, add item, navigate sub-route, timer start/stop).
+    - **Settings / equivalent**: change **every** persisted control at least once; **kill and relaunch** the app once and confirm values **stick** (`shared_preferences`/JSON parity).
+    - **Detail / Editor** (if present): open from its intended entry, edit/save/back; confirm list or parent reflects updates without stale UI (subscribe where needed — Execution step §2「State + navigation」).
+    - **Any dialogs / sheets** tied to core data (rename, confirm delete, permission-adjacent flows): open, confirm **and** dismiss without controller/dispose crashes.
+  - **Anti-pattern**: Treating **`flutter test` + rg checks** alone as “done” **without** at least **one simulator or device run** covering the bullets above when the toolchain allows (`flutter run`). If you truly cannot run the UI (headless blocker), say so explicitly in the handoff and still fix any reproducible crashes from logs the user sends.
+  - **Handoff**: The completion summary MUST state that **functional verification passed** for the above scope, **or** list **remaining defects** plus what was fixed before close.
 - **Boot**: Use `app_common` `BootPage → BootCoordinator → RemoteConfigClient`.
 - **Booting uniqueness (mandatory — avoid identical boot across jacket apps)**:
   - `BootPage` MUST be **visually distinct per generated app** for the short interval while `BootCoordinator` fetches remote config. **Do not** ship the default of only `Scaffold` + a single centered line such as `Text('Booting...')` (or a bare `CircularProgressIndicator` with no other layout).
@@ -56,8 +66,10 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - README must include endpoint + **field mapping** + `remote_url` response example (**random keys**; first item is used).
   - The Chinese review doc (`马甲包复核说明.md`) MUST also include the same endpoint + mapping + response example as `README.md` (see “中文复核文档” below).
 - **iOS privacy**: `apps/<app>/ios/Runner/Info.plist` MUST include `NSUserTrackingUsageDescription` (ATT).
-- **App icon（文生图规范，与 step 3 一致）**：
-  - **强制**：launcher / `app_icon` **必须**以**动物**为视觉主体（纯几何、无生命的物体、无动物形象的抽象 logo **不可**作为唯一主体）。
+- **App icon（与 step 3 一致；供图或自动生成二选一主干）**：
+  - **供图优先**：若 Inputs 提供 **`icon_image_path`（或同义：`app_icon_source_path`、`launcher_icon_image`）** — 指向可用的 **PNG / JPEG / WebP / HEIC（若宿主可转）** 文件（工作区内相对路径或绝对路径），则 **不进行文生图/模型出图**：以该文件为唯一母本，经 step 3 的尺寸检查与 **`sips` 裁切缩放** 落盘为 **`apps/<app_name>/assets/app_icon.png`**（1024²），并将 **原始拷贝**保存为 **`assets/app_icon_source_master.png`**（或保留用户原始文件名记入文档）。须在 README 与 **`马甲包复核说明` 第三节** 标明 **Provided / 产品方供图** 及相对仓库的路径或文件名；**目视核对**吉祥物仍符合 **虎/牛/兔/鼠/龙** 五项硬规范且动物为主画面；若不满足须拒绝使用该图或与用户澄清后更换。**供图模式下画风轮盘**在文档中可标为 **`User-provided artwork`**（或一句中文「供图，非流程内文生图」），不必伪造文生图提示词。
+  - **自动生成**：未供图时沿用下文文生图、画风轮盘与五项物种规则。
+  - **强制**：最终 launcher / `app_icon` **必须**以**动物**为视觉主体（纯几何、无生命的物体、无动物形象的抽象 logo **不可**作为唯一主体）。
   - 优先 **1:1 方图** 素材、**「满框」**（约 80%+ 画幅、少留白、**完整动物**在景别内、无字无商标）。整体须 **图标可读**：高对比轮廓、避开极端圆角盲区；**非**主推写实野生动物摄影。
   - **风格多样化（Mandatory）**：**每个马甲包须单独选定一种画风预设**，与 README、`马甲包复核说明.md` 写清（可用英文 style label + 中文一句解释）。**禁止**让「可爱 3D chibi」成为所有包的**唯一/默认套用**话术；也不得连续多包重复使用**完全相同**的文生图风格描述。**须从下文「画风轮盘」中选且仅选一种**，除非用户在 Inputs 里**明确点名**某一种画风（则服从用户）。
   - **吉祥物物种（硬规范，不得放宽）**：**必须且只能从** **虎 / 牛 / 兔 / 鼠 / 龙** 中 **选出恰好一种** 作为 icon 的动物主体（对应英文 Tiger / Ox / Rabbit / Rat / Dragon；龙为神话龙形象）。  
@@ -82,7 +94,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
       - **字段映射**：与 README 同款的 `### Mapping (random key → semantic field)` 代码块（随机 key → 语义字段）。
       - **响应示例**：与 README 同款的 `### \`remote_url\` response example (first item is used)` 代码块（JSON 数组，首对象含本包随机键名前缀 + 占位值；用于离线核对远端配置）。
       - **须重复写出完整 endpoint 一行 URL**；不得仅写「见 README」而省略上述两段 JSON 示例（复核文件应可**单独打开**即完成 remote 联调参照）。
-    3. **文生图 App Icon 文案**：**必须**写 **(a)** 本包吉祥物为 **虎/牛/兔/鼠/龙** 中之哪一项（硬规范五项择一）、**(b)** 本包选用的 **画风轮盘** 条目（编号或英文名 + 简短中文）；并写 **满框/1:1 方图**、无字无商标、小尺寸可辨；可与产品道具组合，但**动物为主**。注明**横图**时 **内接方裁、勿大 letterbox**；须与 README 英文 icon brief 一致。
+    3. **App Icon 文案**：**自动生成时**：视同 **「文生图 App Icon」** — **必须**写 **(a)** 五项吉祥物中之哪一类、**(b)** **画风轮盘** 条目；并写 **满框/1:1**、无字无商标等；可加 1–2 条可复制中文提示。**产品方供图时**：免写虚构文生图提示；**必须**写 **(a)** 确认的物种 **(虎/牛/兔/鼠/龙)**、**(b)** 图源标识（供图 / 路径或文件名）、**(c)** 实际画面简述（中英文 brief 中与 README 一致）；仍须备注横图落地的 **内接方裁** 规则。
     4. **App Store 提交用英文文案（必选，整块英文）**：为便于 App Store Connect 提交，单列一小节（建议标题：`## App Store listing (English—copy-ready)`），**本节内不出现中文** （节前可用一行中文标注用途，如「以下供 App Store Connect 粘贴」）；须包含可复制粘贴的占位已填好的以下内容（英文撰写，贴合本包真实功能，禁用 `remote_url` / MockAPI / 未实现能力）：
       - **Promotional Text**：对应 ASC 字段 *Promotional Text*；**至多 170 字符**（含空格与标点），可换行但以提交框内连续文本形式给出。
       - **Description**：对应 *Description*；**至多约 4000 字符**，分段落说明产品价值与主要特性（与 app 内真实页面对齐）。
@@ -96,7 +108,8 @@ Collect from user when provided; otherwise generate reasonable defaults:
 - Jacket type: tool / game (default random; write into README)
 - `remote_url` endpoint (optional; if missing, give a unique placeholder)
 - Optional theme (if user specifies, follow it; else random)
-- Optional **app icon** preference: user may name **one** of **虎/牛/兔/鼠/龙** (or its English counterpart) **and/or** **one style wheel preset** (1–6 or its English label); if species unspecified, use Hard requirements (**random one of those five animals + random wheel preset**, avoiding repeating the exact same preset as the immediately prior jacket in this repo when practical). Icon **always** depicts **exactly one** mascot from **only** **Tiger, Ox, Rabbit, Rat, Dragon** (hard rule—no cats, foxes, etc.).
+- Optional **`icon_image_path`** (also accept aliases **`app_icon_source_path`**, **`launcher_icon_image`**): filesystem path to a **raster image** to use **as-is** after normalization (square crop + resize) for **`assets/app_icon.png`**. When set, **do not run text-to-image** for the icon branch; validate visually that subject matches **Tiger / Ox / Rabbit / Rat / Dragon** only. Preserve original as **`assets/app_icon_source_master.png`** (or equivalent) and cite path in README + `马甲包复核说明`.
+- Optional **app icon** preference (when **not** supplying `icon_image_path`): user may name **one** of **虎/牛/兔/鼠/龙** (or its English counterpart) **and/or** **one style wheel preset** (1–6 or its English label); if species unspecified, use Hard requirements (**random one of those five animals + random wheel preset**, avoiding repeating the exact same preset as the immediately prior jacket in this repo when practical). Icon **always** depicts **exactly one** mascot from **only** **Tiger, Ox, Rabbit, Rat, Dragon** (hard rule—no cats, foxes, etc.).
 
 ## Execution steps (do in order)
 
@@ -115,7 +128,7 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - Material 3 theme with consistent color scheme.
   - Empty states, form validation, dialogs/snackbars.
 - Implement the feature set with persistence, including a **main shell** that satisfies **≥5 visible non-Settings primary blocks** (e.g. `NavigationBar` with five destinations, `TabBar`, or a home with five obvious sections each linking to a feature screen—see Hard requirements).
-- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**五个**可见主区块（名称 + 如何进入，如底栏五格 / 首屏五区等），后续步骤会向同一文件追加 **`remote_url`、文生图 App Icon**，并在收尾追加 **整块英文** 的 **App Store Promotional Text / Description / Keywords / Copyright**（见 Hard requirements 第四块与 §7）。
+- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**五个**可见主区块（名称 + 如何进入，如底栏五格 / 首屏五区等），后续步骤会向同一文件追加 **`remote_url`、App Icon 小节**（文生图或供图说明），并在收尾追加 **整块英文** 的 **App Store Promotional Text / Description / Keywords / Copyright**（见 Hard requirements 第四块与 §7）。
 - **State + navigation (avoid “stale UI” bugs)**:
   - If a screen uses `ChangeNotifier` / async-loaded model data, **every route that reads live state must subscribe** (e.g. wrap the page in `ListenableBuilder` / `AnimatedBuilder`, or `Provider` + `context.watch`).
   - Parent-only listeners (e.g. home wrapped in `AnimatedBuilder`) do **not** rebuild **pushed** child routes; detail/list pages need their own subscription.
@@ -124,7 +137,18 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - `lib/features/<feature>/...` (pages, models, storage)
   - `lib/boot/` (boot + remote config integration)
 
-### 3) Generate a theme-fitting app icon (automatic)
+### 3) App icon — **import user image** OR **generate** (automatic)
+
+#### 3a) If **`icon_image_path`** (or accepted alias) is provided in Inputs
+
+- **Resolve path** (workspace-relative or absolute); verify file exists and is readable.
+- **Optional format note**: Prefer **PNG or JPEG**. If tooling cannot read exotic formats on the host, convert once to PNG before resizing (no quality loss beyond source).
+- **Copy original** into the app folder as **`assets/app_icon_source_master.png`** whenever possible (overwrite if re-run); if keeping another extension, write the canonical name README uses.
+- **Normalize** exactly as in **§3b steps 1–5** (`sips` dimension check → center square crop when non-square → **`sips -z 1024 1024`** → output **`assets/app_icon.png`**). **Never** satisfy square by adding large letterbox bands on top/bottom.
+- **Launcher assets**: after `assets/app_icon.png` is finalized, apply **pubspec** `flutter_launcher_icons` stanza below and run `cd apps/<app_name> && flutter pub get && dart run flutter_launcher_icons`.
+- **Docs**: README “App icon” + **`马甲包复核说明` 第三节** — state **provided asset**, repo-relative path, confirmed **five-species** mascot, **`User-provided artwork`** for style preset; omit fake **text-to-image** prompts unless you need internal audit stubs (prefer honest “不适用” + 实拍描述).
+
+#### 3b) If **no** `icon_image_path` — generated artwork path
 
 - **Mascot (required)**: the app icon **must** depict an **animal** as the main subject. **No** “logo-only” or object-only icon without a visible animal.
 - **Which animal（hard gate）**:
@@ -138,8 +162,8 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - **Style execution**: Describe the **chosen wheel preset explicitly** (e.g. “bold flat sticker vector…” / “limited-palette linocut…”); **avoid** vague copy-paste of “generic cute 3D” unless preset (1) is intentionally selected.
   - **Output shape**: Request **1:1 square** and **tight “full-bleed” / 满框 composition** (the **animal** + props **fill most of the frame**—e.g. ~80%+ area; **entire** animal **in frame** where possible—ears/tail/limb tips inside the square **unless** a deliberate tighter crop; **minimal** background / soft bokeh in corners only; “app store icon, no letterboxing bands”).
   - **Constraints**: no text, no logo, high contrast, legible at ~64px, edge-safe for iOS squircle (avoid mock phone frames, avoid critical detail only in the extreme corners).
-- **Update `apps/<app_name>/马甲包复核说明.md`**: add **「文生图 App Icon 提示词」** with 1–2 copy-pastable **Chinese** prompts: **动物主体**、**本包画风轮盘预设**、**1:1、主体满框、少留白、无字无商标**；道具与产品弱关联可写一句。另起一行注明：横版母图须 **内接方裁**、**勿大 letterbox**（同 step 3 `sips`）。
-- **Generate** the art (model/tool may ignore aspect ratio), then **normalize to a 1024×1024 master** at `apps/<app_name>/assets/app_icon.png`:
+- **Update `apps/<app_name>/马甲包复核说明.md`**: for **generated** icons, add **「文生图 App Icon 提示词」** with 1–2 copy-pastable **Chinese** prompts (**动物主体**、**画风轮盘**、满框/no letterbox hints). For **provided** icons, substitute **图源 / 性状描述** instead of fabricated prompts—see Hard requirement block 第三项。
+- **Generate** the art (only when §3b; model/tool may ignore aspect ratio), then **normalize to a 1024×1024 master** at `apps/<app_name>/assets/app_icon.png` (same pipeline as §3a after the art export):
 
   1. **Check dimensions** (macOS): `sips -g pixelWidth -g pixelHeight <path>`.
   2. **If already square** (width = height): `sips -z 1024 1024 <source.png> -o apps/<app_name>/assets/app_icon.png` (or your preferred sharp resize).
@@ -156,7 +180,7 @@ Collect from user when provided; otherwise generate reasonable defaults:
   - `flutter_launcher_icons:` in `pubspec.yaml`: `image_path: assets/app_icon.png`, iOS+Android; for Android **adaptive** set a **solid** `adaptive_icon_background` (e.g. `#ECEFF1` or a warm tone matching the art) and the same `app_icon` as `adaptive_icon_foreground` if you do not use a split foreground layer.
 - Run: `cd apps/<app_name> && flutter pub get && dart run flutter_launcher_icons`
 
-- **README (English)**: one short “App icon” note—**animal mascot required: exactly one of Tiger / Ox / Rabbit / Rat / Dragon** (user-named or randomly chosen among these five); **named style wheel preset**, square 1024² master, **widescreen = center-crop to square, not letterbox**, then `flutter_launcher_icons` (and optional wide source path, if saved).
+- **README (English)**: one short “App icon” note—**animal mascot required: exactly one of Tiger / Ox / Rabbit / Rat / Dragon** (user-named, random when generated, or **must visibly match one** when using **`icon_image_path`**); cite either **provided image path / “user-provided”** or **`named style wheel preset`** when generated; square 1024² master via **crop + resize**, then `dart run flutter_launcher_icons` (and optional `assets/app_icon_source_master.png`).
 
 ### 4) Integrate `app_common` boot flow
 
@@ -257,14 +281,22 @@ No logs in lib/ (mandatory):
 
 ### 7) Validation (don’t get stuck)
 
-- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认 **四** 节齐备：**马甲包功能**（中文；含 **≥5** 非设置主区块）、**`remote_url` / 端点定义**（中文叙述 + endpoint 一行 + 与 README **同款** Mapping / 示例 JSON）、**文生图 App Icon 提示词**（中文；五项吉祥物择一 + 画风轮盘 + 裁剪说明）、以及 **App Store listing（整块英文可复制）**：含四项字段 **Promotional Text**（≤170 字符）、**Description**（≤4000）、**Keywords**（≤100）、**Copyright**（一行）；英文段内不得夹杂中文正文（节首允许单独一行中文用途说明）。
-- **App icon 文件**：`sips -g pixelWidth -g pixelHeight apps/<app_name>/assets/app_icon.png` 应为 **1024×1024**；若用横版母图，确认未用上下条带 letterbox 生成该文件。
+- **Mandatory — full feature smoke (必须与 Hard requirements「Feature verification」一致)**  
+  Before marking the jacket **done**, run **`flutter run`** (simulator or device) unless impossible, and execute a **written checklist** for this specific app — at minimum:
+  1. Cold launch: Boot → enters shell **without red screen**.
+  2. Visit **every bottom-nav / primary destination** listed in README / `马甲包复核说明`; one meaningful gesture per destination.
+  3. Open **Settings** (or equivalent); toggle/adjust **each** persisted option; force-quit and relaunch → **values restored**.
+  4. If app has **list → detail/editor**: repeat open / edit / save / back → parent list not stale (`ListenableBuilder` / Provider where needed).
+  5. Any **dialog + TextEditingController**: confirm/save/dismiss paths **without** disposing the controller before the dialog subtree unmounts (prefer `StatefulWidget` dialog state owning the controller).
+  6. If **Bloom / animations / IndexedStack-heavy** UI: swap tabs repeatedly after async saves to catch disposed-listenable / tween churn bugs.
+  - Record in the chat handoff: **“Feature smoke passed”** or **what failed and how it was fixed** — not optional.
+
+- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认 **四** 节齐备：**马甲包功能**（中文；含 **≥5** 非设置主区块）、**`remote_url` / 端点定义**（中文叙述 + endpoint 一行 + 与 README **同款** Mapping / 示例 JSON）、**第三节 App Icon** — **自动生成**须含画风轮盘 + 可复制中文提示；**供图（`icon_image_path`）**须载明物种 / 图源 / 简述，免虚构 prompts；以及 **App Store listing（整块英文可复制）**：含四项字段 **Promotional Text**（≤170 字符）、**Description**（≤4000）、**Keywords**（≤100）、**Copyright**（一行）；英文段内不得夹杂中文正文（节首允许单独一行中文用途说明）。
+- **App icon 文件**：`sips -g pixelWidth -g pixelHeight apps/<app_name>/assets/app_icon.png` 应为 **1024×1024**；若用横版母图，确认未用上下条带 letterbox 生成该文件。若 Inputs 使用了 **`icon_image_path`**：确认 **`assets/app_icon_source_master.png`**（或文档声明的等价备份）存在，且 README / 复核说明中的 **图源** 可追溯。
 - **Primary blocks (non-Settings)**: After a cold launch, confirm **at least five** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
 - **Booting**: Open the app once and confirm the boot screen is **not** a generic single-line `Booting` / bare centered spinner only; it should be clearly different from a template `BootPage` and aligned with the app theme.
-- Manually sanity-check **one interactive loop per main screen** (tap toggles, save, navigate away/back) so “notifyListeners but UI stuck until pop” issues are caught early.
-- Manually sanity-check Settings:
-  - Changing each setting updates UI immediately and persists after app restart.
-  - Settings options and layout are clearly **theme-specific** and do not look like the previous app’s Settings.
+- **Per-screen loops** (duplicate purpose — now required above): catches “notifyListeners but UI stuck until pop”; do not skip Save/Delete dialogs.
+- Settings spot-check aligns with §Hard **Feature verification**: immediate UI + persistence after restart; layout still **theme-specific**.
 - Always run: `cd apps/<app_name> && flutter test`.
 - Remote routing sanity-check (if remote is configured):
   - Set MockAPI first item to `{ "<ns>Plaf": "1", "<ns>Ur": "https://example.com" }` and confirm the app routes into the in-app container.
@@ -297,7 +329,9 @@ No logs in lib/ (mandatory):
 After completion, summarize:
 - App path: `apps/<app_name>/`
 - What product was generated (English name + one-liner)
-- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：中文三节 + **English App Store** 整块：**Promotional Text / Description / Keywords / Copyright**；以及功能 ≥5 主区块、`remote_url` 两段 JSON、文生图 **虎牛兔鼠龙择一** + 画风轮盘 + **满框/1:1**）
+- **Feature verification**: explicit line — **Functional smoke passed** on simulator/device covering **every primary block + Settings (all persisted fields) + detail/editor + critical dialogs**, **or** list defects fixed / known limitations + whether `flutter run` was blocked.
+- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：中文三节 + **English App Store** 整块：**Promotional Text / Description / Keywords / Copyright**；以及功能 ≥5 主区块、`remote_url` 两段 JSON、第三节 **虎牛兔鼠龙之一** — **自动生成**则画风轮盘 + 可复制提示 / **供图**则图源说明）
+- Optional: **Icon source** noted — **provided** (`icon_image_path`) vs **generated**
 - Confirm **≥5 visible primary product blocks** (excluding Settings) are implemented and documented
 - Briefly describe the **Booting** look (layout + motion), or state that it is text-free visual-only
 - Where to change endpoint
