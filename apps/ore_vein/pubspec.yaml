@@ -1,0 +1,40 @@
+name: ore_vein
+description: Ore Vein mineral field desk (Flutter).
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.5.3
+  app_tracking_transparency: ^2.0.6+1
+  connectivity_plus: ^7.1.1
+  dio: ^5.9.2
+  url_launcher: ^6.3.2
+  package_info_plus: ^10.1.0
+  webview_flutter: ^4.13.1
+  device_info_plus: ^13.1.0
+  adjust_sdk: ^5.6.1
+  appsflyer_sdk: ^6.17.9+1-rc1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: assets/app_icon.png
+  adaptive_icon_background: '#004D40'
+  adaptive_icon_foreground: assets/app_icon.png
