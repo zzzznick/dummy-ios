@@ -2,7 +2,7 @@ name: ore_vein
 description: "Ore Vein — offline English everyday utilities (timer, converter, lists, tip, swatches)."
 publish_to: "none"
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.11.5
