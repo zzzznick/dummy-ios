@@ -1,13 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import '../_qkzmt/_qkzmt.dart';
-import '../services/field_note_store.dart';
+import '../services/ore_vein_data_store.dart';
 import '../shell/ore_vein_shell.dart';
 import 'att_service.dart';
-import 'settings/ore_settings_controller.dart';
-import 'settings/ore_settings_store.dart';
+import 'settings/app_settings_controller.dart';
+import 'settings/app_settings_store.dart';
 import 'theme/ore_vein_theme.dart';
 
 class OreVeinApp extends StatefulWidget {
@@ -18,35 +16,31 @@ class OreVeinApp extends StatefulWidget {
 }
 
 class _OreVeinAppState extends State<OreVeinApp> with WidgetsBindingObserver {
-  final OreSettingsStore _oreStore = OreSettingsStore();
-  final FieldDeskPersistence _deskPersistence = FieldDeskPersistence();
-
-  late final OreSettingsController _settings = OreSettingsController(_oreStore);
-  late final FieldNoteStore _notes = FieldNoteStore(_deskPersistence);
-
+  late final AppSettingsController _settings;
+  late final OreVeinDataStore _data;
   final AttService _att = AttService();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    unawaited(_settings.load());
-    unawaited(_notes.load());
-    unawaited(_att.requestIfNeeded());
+    _settings = AppSettingsController(AppSettingsStore())..load();
+    _data = OreVeinDataStore()..load();
+    _att.requestIfNeeded();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _settings.dispose();
-    _notes.dispose();
+    _data.dispose();
     super.dispose();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      unawaited(_att.requestIfNeeded());
+      _att.requestIfNeeded();
     }
   }
 
@@ -58,12 +52,9 @@ class _OreVeinAppState extends State<OreVeinApp> with WidgetsBindingObserver {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Ore Vein',
-          theme: OreVeinTheme.build(snapshot: _settings.value),
+          theme: OreVeinTheme.build(settings: _settings.value),
           home: Qkzmt0(
-            a: (_) => OreVeinShell(
-              settings: _settings,
-              notes: _notes,
-            ),
+            a: (_) => OreVeinShell(settings: _settings, data: _data),
           ),
         );
       },

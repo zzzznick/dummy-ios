@@ -1,6 +1,6 @@
 name: ore_vein
-description: Ore Vein mineral field desk (Flutter).
-publish_to: 'none'
+description: "Ore Vein — offline English everyday utilities (timer, converter, lists, tip, swatches)."
+publish_to: "none"
 
 version: 1.0.0+1
 
@@ -36,5 +36,5 @@ flutter_launcher_icons:
   ios: true
   remove_alpha_ios: true
   image_path: assets/app_icon.png
-  adaptive_icon_background: '#004D40'
+  adaptive_icon_background: "#1A237E"
   adaptive_icon_foreground: assets/app_icon.png

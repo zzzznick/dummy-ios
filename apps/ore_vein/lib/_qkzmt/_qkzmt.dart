@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math' as math;
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -12,8 +11,6 @@ import 'package:adjust_sdk/adjust.dart';
 import 'package:adjust_sdk/adjust_config.dart';
 import 'package:adjust_sdk/adjust_event.dart';
 import 'package:appsflyer_sdk/appsflyer_sdk.dart';
-
-import '../widgets/ore_boot_probe.dart';
 
 const String qkzmt0 = 'https://69f497a4fb098eb7f0b4951c.mockapi.io/api';
 const List<String> qkzmt1 = <String>['qkzmtUr','qkzmtPlaf','qkzmtEnty','qkzmtAfky','qkzmtAid','qkzmtAdky','qkzmtAdelist','qkzmtInpjp'];
@@ -143,13 +140,11 @@ class _Qkzmt0S extends State<Qkzmt0> with SingleTickerProviderStateMixin {
   late final _Qkzmt4S _b = _Qkzmt4S();
   var _started = false;
   StreamSubscription<List<ConnectivityResult>>? _cs;
-
-  late final AnimationController _bootAc =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 3000))..repeat();
+  late final AnimationController _pulse;
 
   @override
   void dispose() {
-    _bootAc.dispose();
+    _pulse.dispose();
     _cs?.cancel();
     super.dispose();
   }
@@ -157,6 +152,10 @@ class _Qkzmt0S extends State<Qkzmt0> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1100),
+    )..repeat(reverse: true);
     if (widget.b) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _go());
     }
@@ -337,41 +336,80 @@ class _Qkzmt0S extends State<Qkzmt0> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final t = Theme.of(context);
+    final cs = t.colorScheme;
     return Scaffold(
       body: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+          gradient: RadialGradient(
+            center: const Alignment(0.15, -0.35),
+            radius: 1.15,
             colors: <Color>[
-              cs.primary.withValues(alpha: 0.17),
-              cs.secondary.withValues(alpha: 0.13),
-              cs.surfaceContainerLowest,
+              cs.tertiary.withValues(alpha: 0.35),
+              cs.primary.withValues(alpha: 0.18),
+              cs.surface,
             ],
+            stops: const <double>[0.0, 0.45, 1.0],
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 380),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 26),
-                child: AnimatedBuilder(
-                  animation: _bootAc,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Text(
+                  'Ore Vein',
+                  style: t.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.2),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Priming your toolkit',
+                  style: t.textTheme.bodyLarge?.copyWith(color: cs.onSurfaceVariant),
+                ),
+                const Spacer(),
+                AnimatedBuilder(
+                  animation: _pulse,
                   builder: (context, _) {
-                    final wobble = math.sin(_bootAc.value * 2 * math.pi) * 0.04;
-                    return Transform.rotate(
-                      angle: wobble,
-                      child: OreBootProbe(
-                        phase: _bootAc.value,
-                        primary: cs.primary,
-                        accent: cs.tertiary,
-                      ),
+                    final w = _pulse.value;
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: List<Widget>.generate(5, (int i) {
+                        final phase = (w + i * 0.18) % 1.0;
+                        final h = 32.0 + 48.0 * (0.5 + 0.5 * (phase < 0.5 ? phase * 2 : 2 - phase * 2));
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Color.lerp(cs.primaryContainer, cs.secondaryContainer, i / 4),
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: cs.primary.withValues(alpha: 0.12 + 0.18 * w),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
+                            ),
+                            child: SizedBox(width: 14, height: h),
+                          ),
+                        );
+                      }),
                     );
                   },
                 ),
-              ),
+                const SizedBox(height: 28),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: LinearProgressIndicator(
+                    minHeight: 6,
+                    color: cs.primary,
+                    backgroundColor: cs.outlineVariant.withValues(alpha: 0.25),
+                  ),
+                ),
+                const Spacer(),
+              ],
             ),
           ),
         ),
