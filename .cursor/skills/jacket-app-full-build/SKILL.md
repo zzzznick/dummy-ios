@@ -1,6 +1,6 @@
 ---
 name: jacket-app-full-build
-description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with at least five visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url endpoint + namespaced keys, Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), app icon rules, and mandatory manual verification that every shipped feature path runs without runtime errors before handoff. Use for one-shot jacket app build.
+description: End-to-end workflow to generate a complete Flutter iOS jacket app: create a full English real app with three to five visible primary surfaces (excluding Settings), app_common boot flow with a per-app unique Booting screen, per-app remote_url endpoint + namespaced keys, Chinese review doc 马甲包复核说明.md, iOS Info.plist (ATT), app icon rules, and mandatory manual verification that every shipped feature path runs without runtime errors before handoff. Random themes must be mainstream and self-explanatory (name + tabs), not opaque metaphors. Use for one-shot jacket app build.
 ---
 
 # One-shot Flutter iOS 马甲包生成（全流程）
@@ -9,7 +9,7 @@ description: End-to-end workflow to generate a complete Flutter iOS jacket app: 
 
 Use this skill when the user wants **one command / one skill** to finish the entire jacket app setup:
 - Create a new app under `apps/`
-- Generate a **real, production-like** app experience (not just skeleton) with **≥5 visible primary product blocks** (Settings excluded) per Hard requirements
+- Generate a **real, production-like** app experience (not just skeleton) with **3–5 visible primary product blocks** (Settings excluded; exact count within that range per Hard requirements)
 - Integrate `app_common` boot flow with a **unique Booting** experience per app
 - Generate **per-app** `remote_url` endpoint + random field keyset + mapping + response example (**docs are source of truth**; code is **namespaced** under `lib/_<ns>/_<ns>.dart` and MUST NOT contain semantic mapping)
 - Ensure iOS `Info.plist` is safe (must include ATT)
@@ -26,17 +26,22 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - App folder name (`apps/<app_name>`) should be **neutral** and not include: `jacket`, `demo`, `test`, `sample`, `example`, `tmp`.
   - App display name (iOS `CFBundleDisplayName`, Android label), README product name, and in-app titles should be **brandable** (1–3 words), not snake_case.
   - Avoid obvious LLM artifacts: "AI", "Cursor", "Generated", "Template".
-- **Theme randomness**: If user didn’t specify a theme, **randomly generate a theme**.
+- **Mainstream clarity (random themes — mandatory when user did not specify a theme)**:
+  - Random products MUST be **immediately understandable** to a general App Store user: within **~3 seconds**, the **display name + bottom-nav labels (or first-screen section titles)** should make the **job-to-be-done** obvious **without** reading README.
+  - Prefer **plain English** category words users already search for: e.g. *Timer*, *Converter*, *Checklist*, *Kitchen*, *Colors*, *Noise*, *Packing*, *Tips*, *Calculator*, *Flashcards*, *Quotes*, *Breathing*, *Metronome*, *Ruler*, *Budget* (subject to other constraints), *Plants* (care, not mood journaling), etc.
+  - **Discourage** opaque or poetic codenames, niche hobby jargon, or metaphor-only brands when no user theme is given (examples of what to **avoid** for random generation: names that read like lore titles, geology/mining metaphors, or invented compound words where the category is unclear—e.g. a random user cannot tell *Ore Vein* is a mineral desk from the name alone).
+  - If a slightly distinctive brand is desired, pair it with **clear category anchoring** in the **first visible UI** (e.g. subtitle on home, section headers, or tab labels that spell out the use case in common vocabulary—not internal codenames).
+- **Theme randomness**: If user didn’t specify a theme, **randomly generate a theme** that satisfies **Mainstream clarity** above (not only “unique”).
 - **Diversity**: Random theme MUST be a distinct product type and **NOT** a journal/tracker/check-in app.
   - Home information architecture MUST NOT be “linear list + FAB”.
   - Core entity/model MUST be meaningfully different from prior generated apps.
 - **Offline-first**: No backend required. Everything works locally.
 - **Minimum pages + visible primary blocks (Settings excluded from the count)**:
-  - You MUST still have **Settings** (full screen or equivalent) and **at least one** **Detail/Edit** (or editor) for the core entity.
-  - You MUST also deliver **at least 5** **visible primary product blocks** *not counting* the Settings entry. A **block** is a distinct, product-meaningful surface the user is expected to use (e.g. a tab, a `NavigationBar`/`TabBar` page, a major dashboard section with its own title + body, a dedicated “guide / lab / list vs map” screen).
-  - **Visibility rule (anti–“one home + settings”)**: Do **not** ship a shell where, on a cold start, the only obvious destinations are *one* home-like screen and *Settings* while all other value lives exclusively behind a push route the user may never open. The **5+ blocks** should be **discoverable** without reading README: e.g. **bottom navigation** or **top tabs** with **5 items** (all non-settings), or a **home dashboard** with **5+ clearly separated primary areas** (titles/sections) each navigable in one obvious gesture.
-  - **Detail/Edit** may count as one of the five *if* it is clearly exposed (e.g. a tab, or a primary list–detail pattern where the “list” is visibly one of five modes). If Detail is only reachable by tapping a row (still OK for depth), the **other four** must still be **obvious** (tabs / other top-level feature pages).
-- **Implied by above**: *Home* (or first tab) is typically block #1; add **2+** more top-level or equally visible surfaces, then keep **Settings** separate (often an app-bar action, not a hidden-only route).
+  - You MUST still have **Settings** (full screen or equivalent) and **at least one** **Detail/Edit** (or editor) for the core entity when the product has a natural list–detail or editor flow.
+  - You MUST deliver **between 3 and 5** (**inclusive**) **visible primary product blocks** *not counting* the Settings entry. A **block** is a distinct, product-meaningful surface the user is expected to use (e.g. a tab, a `NavigationBar`/`TabBar` page, a major dashboard section with its own title + body, a dedicated “guide / lab / list vs map” screen). **Prefer 5** when the concept clearly supports five distinct jobs; **3–4** is allowed when fewer tabs/sections would stay clearer—**never fewer than 3**, **never more than 5**.
+  - **Visibility rule (anti–“one home + settings”)**: Do **not** ship a shell where, on a cold start, the only obvious destinations are *one* home-like screen and *Settings* while all other value lives exclusively behind a push route the user may never open. The **3–5 blocks** should be **discoverable** without reading README: e.g. **bottom navigation** or **top tabs** with **3–5 items** (all non-settings), or a **home dashboard** with **3–5 clearly separated primary areas** (titles/sections) each navigable in one obvious gesture.
+  - **Detail/Edit** may count toward the **3–5** *if* it is clearly exposed (e.g. a tab, or a primary list–detail pattern where the “list” is visibly one of the primary modes). If Detail is only behind a row tap (still OK for depth), **top-level** discoverable blocks (tabs / dashboard sections) alone must still number **3–5**; the pushed editor does **not** substitute for missing top-level destinations.
+- **Implied by above**: *Home* (or first tab) is typically block #1; add **enough** top-level or equally visible surfaces to reach **at least 3 and at most 5** non-settings primary blocks, then keep **Settings** separate (often an app-bar action, not a hidden-only route).
 - **Settings uniqueness (avoid same UI across apps)**:
   - The Settings screen MUST include **at least 2 settings that are specific to the app’s product concept** (not just theme color + reset).
   - The Settings screen layout MUST NOT be a copy of prior generated apps (avoid the same “Appearance seed color chips + Reset all data + About” structure).
@@ -46,7 +51,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
   - Delivery is **not complete** until **every user-visible product capability** shipped in this app has been **verified working** end-to-end: **no uncaught exceptions**, no red Flutter error screen, and no broken primary action (button/save/dialog/navigation) on the happy path.
   - **Minimum scope (must all pass)**:
     - **Cold start → Boot gate → local shell** (or remote container if you intentionally test that branch).
-    - **Each of the ≥5 primary blocks** (excluding Settings): open, perform **one real interaction loop** appropriate to that screen (e.g. toggle, add item, navigate sub-route, timer start/stop).
+    - **Each of the 3–5 primary blocks** shipped for this app (excluding Settings): open, perform **one real interaction loop** appropriate to that screen (e.g. toggle, add item, navigate sub-route, timer start/stop).
     - **Settings / equivalent**: change **every** persisted control at least once; **kill and relaunch** the app once and confirm values **stick** (`shared_preferences`/JSON parity).
     - **Detail / Editor** (if present): open from its intended entry, edit/save/back; confirm list or parent reflects updates without stale UI (subscribe where needed — Execution step §2「State + navigation」).
     - **Any dialogs / sheets** tied to core data (rename, confirm delete, permission-adjacent flows): open, confirm **and** dismiss without controller/dispose crashes.
@@ -89,7 +94,7 @@ Use this skill when the user wants **one command / one skill** to finish the ent
 - **中文复核文档（本流程强制，与 English README 并列）**：
   - 在 `apps/<app_name>/` 下**只使用一个**固定文件：`马甲包复核说明.md`。**主体复核文字使用中文**；其中 **第四块「App Store 提交用英文文案」必须整段英文**（仅此块英文，便于直接粘贴 App Store Connect），不得夹中文释义污染可粘贴段落。
   - 该文件必须**统一收录**以下**四**块内容（可分段编号，不得拆成多个文档）：
-    1. **马甲包功能**：用中文写清产品定位、核心实体、主要页面与交互、与 boot/remote 的衔接方式（读哪些配置、不依赖后端的点）；并**明确列出除设置外至少五个可见主区块**（名称 + 进入方式，与本技能「≥5 visible primary blocks」一致，便于复核）。
+    1. **马甲包功能**：用中文写清产品定位、核心实体、主要页面与交互、与 boot/remote 的衔接方式（读哪些配置、不依赖后端的点）；并**明确列出除设置外三至五个可见主区块**（名称 + 进入方式，与本技能「3–5 visible primary blocks」一致，便于复核）。
    2. **`remote_url` / 端点定义**：用中文写清本包 `remoteConfigEndpoint` 的完整 URL、随机字段 keyset 的用途；并**必须收录与 `README.md` 中 Remote config 节一致的两段技术内容**（仅说明文字可中文，JSON 内键名保持随机串英文）：
       - **字段映射**：与 README 同款的 `### Mapping (random key → semantic field)` 代码块（随机 key → 语义字段）。
       - **响应示例**：与 README 同款的 `### \`remote_url\` response example (first item is used)` 代码块（JSON 数组，首对象含本包随机键名前缀 + 占位值；用于离线核对远端配置）。
@@ -117,18 +122,19 @@ Collect from user when provided; otherwise generate reasonable defaults:
 
 - Ensure `apps/<app_name>/` doesn’t exist.
 - If the user didn’t provide an `app_name`, generate:
-  - folder name: lower_snake_case (2–3 words) like `focus_compass`, `pack_pal`, `spark_timer`
-  - product name: Title Case (1–3 words) like "Focus Compass"
+  - folder name: lower_snake_case (2–3 words) like `kitchen_convert`, `pack_pal`, `hue_studio` (prefer **category-evident** roots over abstract metaphors).
+  - product name: Title Case (1–3 words) that a stranger can map to a store category, e.g. "Kitchen Convert", "Pack Pal", "Hue Studio" (see Hard requirements **Mainstream clarity**).
 - Run: `flutter create apps/<app_name>`.
 
 ### 2) Build the “real app” (English-only)
 
-- Decide random product concept (must satisfy diversity constraints).
+- Decide random product concept (must satisfy diversity constraints **and** Hard requirements **Mainstream clarity**). When the user did not supply a theme, **pick from familiar “utility / hobby desk” categories** (cooking math, intervals, color tools, packing/travel lists, study sounds, tip calculators, offline reference decks, metronome/tuner-adjacent tools, etc.)—**not** niche subcultures that need domain knowledge to interpret the title.
+- **Self-test before building UI**: ask “Would my non-expert relative guess what this app does from **name + primary navigation labels (about 3–5)** alone?” If **no**, revise the name and/or tab labels until **yes**, without violating the anti–journal/tracker/check-in rule.
 - Create a coherent UI system:
   - Material 3 theme with consistent color scheme.
   - Empty states, form validation, dialogs/snackbars.
-- Implement the feature set with persistence, including a **main shell** that satisfies **≥5 visible non-Settings primary blocks** (e.g. `NavigationBar` with five destinations, `TabBar`, or a home with five obvious sections each linking to a feature screen—see Hard requirements).
-- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外至少**五个**可见主区块（名称 + 如何进入，如底栏五格 / 首屏五区等），后续步骤会向同一文件追加 **`remote_url`、App Icon 小节**（文生图或供图说明），并在收尾追加 **整块英文** 的 **App Store Promotional Text / Description / Keywords / Copyright**（见 Hard requirements 第四块与 §7）。
+- Implement the feature set with persistence, including a **main shell** that satisfies **3–5 visible non-Settings primary blocks** (e.g. `NavigationBar` with three to five destinations, `TabBar`, or a home dashboard with three to five obvious sections each linking to a feature screen—see Hard requirements).
+- **Create or update** `apps/<app_name>/马甲包复核说明.md`：先写入 **「马甲包功能」** 小节（中文），覆盖产品功能与页面范围，并**用中文列明**除设置外**三至五个**可见主区块（名称 + 如何进入，如底栏三至五格 / 首屏三至五区等），后续步骤会向同一文件追加 **`remote_url`、App Icon 小节**（文生图或供图说明），并在收尾追加 **整块英文** 的 **App Store Promotional Text / Description / Keywords / Copyright**（见 Hard requirements 第四块与 §7）。
 - **State + navigation (avoid “stale UI” bugs)**:
   - If a screen uses `ChangeNotifier` / async-loaded model data, **every route that reads live state must subscribe** (e.g. wrap the page in `ListenableBuilder` / `AnimatedBuilder`, or `Provider` + `context.watch`).
   - Parent-only listeners (e.g. home wrapped in `AnimatedBuilder`) do **not** rebuild **pushed** child routes; detail/list pages need their own subscription.
@@ -291,9 +297,9 @@ No logs in lib/ (mandatory):
   6. If **Bloom / animations / IndexedStack-heavy** UI: swap tabs repeatedly after async saves to catch disposed-listenable / tween churn bugs.
   - Record in the chat handoff: **“Feature smoke passed”** or **what failed and how it was fixed** — not optional.
 
-- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认 **四** 节齐备：**马甲包功能**（中文；含 **≥5** 非设置主区块）、**`remote_url` / 端点定义**（中文叙述 + endpoint 一行 + 与 README **同款** Mapping / 示例 JSON）、**第三节 App Icon** — **自动生成**须含画风轮盘 + 可复制中文提示；**供图（`icon_image_path`）**须载明物种 / 图源 / 简述，免虚构 prompts；以及 **App Store listing（整块英文可复制）**：含四项字段 **Promotional Text**（≤170 字符）、**Description**（≤4000）、**Keywords**（≤100）、**Copyright**（一行）；英文段内不得夹杂中文正文（节首允许单独一行中文用途说明）。
+- **中文复核文件**：打开 `apps/<app_name>/马甲包复核说明.md`，确认 **四** 节齐备：**马甲包功能**（中文；含 **3–5** 个非设置主区块）、**`remote_url` / 端点定义**（中文叙述 + endpoint 一行 + 与 README **同款** Mapping / 示例 JSON）、**第三节 App Icon** — **自动生成**须含画风轮盘 + 可复制中文提示；**供图（`icon_image_path`）**须载明物种 / 图源 / 简述，免虚构 prompts；以及 **App Store listing（整块英文可复制）**：含四项字段 **Promotional Text**（≤170 字符）、**Description**（≤4000）、**Keywords**（≤100）、**Copyright**（一行）；英文段内不得夹杂中文正文（节首允许单独一行中文用途说明）。
 - **App icon 文件**：`sips -g pixelWidth -g pixelHeight apps/<app_name>/assets/app_icon.png` 应为 **1024×1024**；若用横版母图，确认未用上下条带 letterbox 生成该文件。若 Inputs 使用了 **`icon_image_path`**：确认 **`assets/app_icon_source_master.png`**（或文档声明的等价备份）存在，且 README / 复核说明中的 **图源** 可追溯。
-- **Primary blocks (non-Settings)**: After a cold launch, confirm **at least five** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
+- **Primary blocks (non-Settings)**: After a cold launch, confirm **three to five** product surfaces are obvious (tabs/sections/destinations), not only one home + Settings.
 - **Booting**: Open the app once and confirm the boot screen is **not** a generic single-line `Booting` / bare centered spinner only; it should be clearly different from a template `BootPage` and aligned with the app theme.
 - **Per-screen loops** (duplicate purpose — now required above): catches “notifyListeners but UI stuck until pop”; do not skip Save/Delete dialogs.
 - Settings spot-check aligns with §Hard **Feature verification**: immediate UI + persistence after restart; layout still **theme-specific**.
@@ -328,11 +334,11 @@ No logs in lib/ (mandatory):
 
 After completion, summarize:
 - App path: `apps/<app_name>/`
-- What product was generated (English name + one-liner)
+- What product was generated (English name + one-liner), and **one line** confirming **Mainstream clarity**: why a stranger would understand the app from **name + primary navigation labels** alone
 - **Feature verification**: explicit line — **Functional smoke passed** on simulator/device covering **every primary block + Settings (all persisted fields) + detail/editor + critical dialogs**, **or** list defects fixed / known limitations + whether `flutter run` was blocked.
-- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：中文三节 + **English App Store** 整块：**Promotional Text / Description / Keywords / Copyright**；以及功能 ≥5 主区块、`remote_url` 两段 JSON、第三节 **虎牛兔鼠龙之一** — **自动生成**则画风轮盘 + 可复制提示 / **供图**则图源说明）
+- **Chinese review doc path**: `apps/<app_name>/马甲包复核说明.md`（确认已含：中文三节 + **English App Store** 整块：**Promotional Text / Description / Keywords / Copyright**；以及功能 **3–5** 个主区块、`remote_url` 两段 JSON、第三节 **虎牛兔鼠龙之一** — **自动生成**则画风轮盘 + 可复制提示 / **供图**则图源说明）
 - Optional: **Icon source** noted — **provided** (`icon_image_path`) vs **generated**
-- Confirm **≥5 visible primary product blocks** (excluding Settings) are implemented and documented
+- Confirm **3–5 visible primary product blocks** (excluding Settings) are implemented and documented
 - Briefly describe the **Booting** look (layout + motion), or state that it is text-free visual-only
 - Where to change endpoint
 - Confirm Info.plist includes ATT key
